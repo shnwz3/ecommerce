@@ -2,9 +2,10 @@
 
 import React from "react";
 import Link from "next/link";
-import { ArrowRight, Flame } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Product } from "@/lib/types";
 import { ProductCard } from "./ProductCard";
+import { RoyalDivider } from "./ui/RoyalMotifs";
 
 interface BestSellersGridProps {
   products: Product[];
@@ -15,28 +16,14 @@ export const BestSellersGrid: React.FC<BestSellersGridProps> = ({ products }) =>
   const itemsToShow = bestSellers.length > 0 ? bestSellers : products.slice(0, 4);
 
   return (
-    <section className="py-12 sm:py-16 bg-[#FCF3ED]">
+    <section className="py-14 sm:py-20 bg-[#FAF5EE] border-b border-[#7B3D14]/15">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
-        <div className="flex items-end justify-between mb-8 sm:mb-10">
-          <div>
-            <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.2em] text-[#DA3F3F]">
-              <Flame className="w-4 h-4 fill-[#DA3F3F]" />
-              <span>Customer Favorites</span>
-            </div>
-            <h2 className="font-serif-heading text-2xl sm:text-4xl font-bold text-[#341B09] mt-1">
-              Best Sellers
-            </h2>
-          </div>
-
-          <Link
-            href="/collections/best-sellers"
-            className="hidden sm:inline-flex items-center gap-2 px-5 py-2 rounded-full border border-[#7B3D14]/25 text-[#7B3D14] text-xs font-bold hover:bg-[#7B3D14] hover:text-white transition-all shadow-sm group"
-          >
-            <span>Shop More</span>
-            <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-          </Link>
-        </div>
+        {/* Royal Section Header */}
+        <RoyalDivider
+          kicker="Heirloom Favorites"
+          title="Most Coveted Best Sellers"
+          subtitle="Celebrated across thousands of weddings and grand celebrations across India."
+        />
 
         {/* 4-Column Product Grid */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
@@ -45,14 +32,14 @@ export const BestSellersGrid: React.FC<BestSellersGridProps> = ({ products }) =>
           ))}
         </div>
 
-        {/* Mobile View More */}
-        <div className="sm:hidden text-center mt-8">
+        {/* Bottom Centered View All CTA */}
+        <div className="text-center mt-10 sm:mt-12">
           <Link
             href="/collections/best-sellers"
-            className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-[#7B3D14] text-white text-xs font-bold shadow-md"
+            className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-white text-[#7B3D14] hover:bg-[#7B3D14] hover:text-white border border-[#C59A4E]/40 text-xs sm:text-sm font-bold uppercase tracking-wider transition-all shadow-md hover:shadow-xl hover:scale-105 group"
           >
-            <span>View All Best Sellers</span>
-            <ArrowRight className="w-3.5 h-3.5" />
+            <span>Explore All Best Sellers</span>
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </Link>
         </div>
       </div>

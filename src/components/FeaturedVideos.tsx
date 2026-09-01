@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Play, Pause, Sparkles, X, Volume2, VolumeX, ArrowRight, ShoppingBag } from "lucide-react";
 import { useStore } from "@/context/StoreContext";
+import { RoyalDivider } from "./ui/RoyalMotifs";
 
 interface VideoCard {
   id: string;
@@ -184,21 +185,14 @@ export const FeaturedVideos: React.FC = () => {
   };
 
   return (
-    <section className="py-12 sm:py-16 bg-[#F8EFEA] border-t border-[#7B3D14]/10">
+    <section className="py-14 sm:py-20 bg-royal-damask border-y border-[#7B3D14]/15">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
-        <div className="text-center max-w-xl mx-auto mb-8 sm:mb-12">
-          <span className="text-xs font-bold uppercase tracking-[0.2em] text-[#7B3D14]">
-            Reels & Live Drapes
-          </span>
-          <h2 className="font-serif-heading text-2xl sm:text-4xl font-bold text-[#341B09] mt-1">
-            Our Featured Videos
-          </h2>
-          <p className="text-xs sm:text-sm text-[#341B09]/70 mt-2">
-            Hover to watch real drapes, fabric close-ups, and live styling in motion.
-          </p>
-          <div className="w-12 h-0.5 bg-[#7B3D14] mx-auto mt-3 rounded-full opacity-60" />
-        </div>
+        {/* Royal Section Header */}
+        <RoyalDivider
+          kicker="Reels & Live Drapes"
+          title="Drapes In Real Motion"
+          subtitle="Hover to watch authentic silk textures, pure gold zari shimmer, and festive drapes in motion."
+        />
 
         {/* 4 Portrait Video Cards with Hover Auto-Play */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">

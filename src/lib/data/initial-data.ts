@@ -29,7 +29,7 @@ export const INITIAL_COLLECTIONS: Collection[] = [
     id: 'col-4',
     name: 'Pattu Sarees',
     slug: 'pattu-sarees',
-    image_url: 'https://images.unsplash.com/photo-1609357605129-26f69add5d6e?q=80&w=800&auto=format&fit=crop',
+    image_url: 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?q=80&w=800&auto=format&fit=crop',
     description: 'Traditional pure silk Kanchipuram & Banarasi weaves',
     item_count: 45
   },
@@ -54,7 +54,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     image_url: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=800&auto=format&fit=crop',
     gallery_urls: [
       'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=800&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1609357605129-26f69add5d6e?q=80&w=800&auto=format&fit=crop'
+      'https://images.unsplash.com/photo-1595777457583-95e059d581b8?q=80&w=800&auto=format&fit=crop'
     ],
     category: 'pattu-sarees',
     sizes: ['Free Size'],
@@ -87,9 +87,9 @@ export const INITIAL_PRODUCTS: Product[] = [
     description: 'Lightweight semi-silk saree adorned with temple borders and geometric woven patterns. Effortless to drape for day festivals and family functions.',
     price: 1899,
     sale_price: 555,
-    image_url: 'https://images.unsplash.com/photo-1609357605129-26f69add5d6e?q=80&w=800&auto=format&fit=crop',
+    image_url: 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?q=80&w=800&auto=format&fit=crop',
     gallery_urls: [
-      'https://images.unsplash.com/photo-1609357605129-26f69add5d6e?q=80&w=800&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1595777457583-95e059d581b8?q=80&w=800&auto=format&fit=crop',
       'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=800&auto=format&fit=crop'
     ],
     category: 'fancy-sarees',
@@ -108,7 +108,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     image_url: 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?q=80&w=800&auto=format&fit=crop',
     gallery_urls: [
       'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?q=80&w=800&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1609357605129-26f69add5d6e?q=80&w=800&auto=format&fit=crop'
+      'https://images.unsplash.com/photo-1595777457583-95e059d581b8?q=80&w=800&auto=format&fit=crop'
     ],
     category: 'designer-sarees',
     sizes: ['Free Size'],
@@ -126,7 +126,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     image_url: 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?q=80&w=800&auto=format&fit=crop',
     gallery_urls: [
       'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?q=80&w=800&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1609357605129-26f69add5d6e?q=80&w=800&auto=format&fit=crop'
+      'https://images.unsplash.com/photo-1595777457583-95e059d581b8?q=80&w=800&auto=format&fit=crop'
     ],
     category: 'fancy-sarees',
     sizes: ['Free Size'],
@@ -213,7 +213,7 @@ export const INITIAL_BANNERS: Banner[] = [
   },
   {
     id: 'ban-5',
-    image_url: 'https://images.unsplash.com/photo-1609357605129-26f69add5d6e?q=80&w=1600&auto=format&fit=crop',
+    image_url: 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?q=80&w=1600&auto=format&fit=crop',
     link_url: '/collections/designer-sarees',
     title: 'Pure Elegance in Every Drape',
     subtitle: 'Honest Prices Since 1996 • Direct from Artisans',

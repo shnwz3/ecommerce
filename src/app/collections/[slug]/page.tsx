@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getProducts, getCollections } from "@/lib/supabase/api";
 import { CollectionClientView } from "./CollectionClientView";
+import { LotusMedallion, CornerFiligree } from "@/components/ui/RoyalMotifs";
 
 export const revalidate = 0;
 
@@ -23,20 +24,20 @@ export default async function CollectionPage({ params, searchParams }: PageProps
 
   // Determine active collection details
   let collectionTitle = "All Sarees & Lehengas";
-  let collectionDesc = "Explore our entire catalog of handcrafted authentic Indian weaves.";
+  let collectionDesc = "Explore handcrafted Kanchipuram silk, pure Banarasi drapes, and royal bridal couture direct from master looms.";
 
   if (slug === "all") {
-    collectionTitle = "Complete Storefront Collection";
-    collectionDesc = "Handcrafted sarees, bridal lehengas, and festive ensembles direct from master looms.";
+    collectionTitle = "All Masterpiece Sarees & Lehengas";
+    collectionDesc = "Browse our entire repository of handcrafted pure silk, organza, and bridal couture.";
   } else if (slug === "offer-zone") {
     collectionTitle = "Festive Offer Zone";
-    collectionDesc = "Unbelievable discounts on premium silk sarees and bridal sets for a limited time.";
+    collectionDesc = "Exclusive festive discounts on handpicked pure silk and designer party sarees.";
   } else if (slug === "best-sellers") {
-    collectionTitle = "Best Selling Handlooms";
-    collectionDesc = "Our most beloved customer favorites with five-star artisan reviews.";
+    collectionTitle = "Heirloom Best Sellers";
+    collectionDesc = "Customer favorite drapes loved across thousands of weddings and celebrations.";
   } else if (slug === "new-arrivals") {
-    collectionTitle = "New Arrivals";
-    collectionDesc = "Fresh designs, contemporary colorways, and new bridal styles just added.";
+    collectionTitle = "Fresh Off The Looms";
+    collectionDesc = "Newly woven festive silk collections, pure zari statements, and seasonal pastels.";
   } else {
     const col = allCollections.find((c) => c.slug === slug);
     if (col) {
@@ -67,7 +68,7 @@ export default async function CollectionPage({ params, searchParams }: PageProps
   }
 
   return (
-    <main className="min-h-screen bg-[#FCF3ED] py-8 sm:py-12">
+    <main className="min-h-screen bg-royal-raw-silk py-8 sm:py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Breadcrumbs */}
         <nav className="flex items-center gap-2 text-xs text-[#341B09]/60 mb-6">
@@ -82,16 +83,20 @@ export default async function CollectionPage({ params, searchParams }: PageProps
           <span className="text-[#7B3D14] font-semibold capitalize">{collectionTitle}</span>
         </nav>
 
-        {/* Collection Hero Header */}
-        <div className="bg-white rounded-3xl p-6 sm:p-10 border border-[#7B3D14]/15 shadow-sm mb-8">
-          <div className="max-w-2xl">
-            <span className="text-xs font-bold uppercase tracking-[0.2em] text-[#7B3D14]">
-              Shopin Showroom
-            </span>
-            <h1 className="font-serif-heading text-3xl sm:text-4xl md:text-5xl font-bold text-[#341B09] mt-1.5 capitalize">
+        {/* Royal Collection Hero Header with Damask & Filigree */}
+        <div className="relative bg-royal-damask rounded-3xl p-6 sm:p-10 border-2 border-[#C59A4E]/30 shadow-md mb-8 overflow-hidden">
+          <CornerFiligree position="top-right" className="w-8 h-8 text-[#C59A4E]/40" />
+          <CornerFiligree position="bottom-left" className="w-8 h-8 text-[#C59A4E]/40" />
+
+          <div className="max-w-2xl relative z-10">
+            <div className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.2em] text-[#8E4718]">
+              <LotusMedallion className="w-3.5 h-3.5 text-[#C59A4E]" />
+              <span>Shopin Vault • Authentic Since 1996</span>
+            </div>
+            <h1 className="font-serif-heading text-3xl sm:text-4xl md:text-5xl font-bold text-[#341B09] mt-2 capitalize">
               {collectionTitle}
             </h1>
-            <p className="text-xs sm:text-sm text-[#341B09]/70 mt-2.5 leading-relaxed">
+            <p className="text-xs sm:text-sm text-[#341B09]/75 mt-2.5 leading-relaxed font-light">
               {collectionDesc}
             </p>
           </div>

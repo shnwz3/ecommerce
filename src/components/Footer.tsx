@@ -17,7 +17,7 @@ export const Footer: React.FC = () => {
   };
 
   return (
-    <footer className="bg-[#241206] text-[#FCF3ED] pt-16 pb-24 lg:pb-14 border-t border-[#C59A4E]/30 relative overflow-hidden">
+    <footer className="bg-royal-ebony text-[#FCF3ED] pt-16 pb-24 lg:pb-14 border-t-2 border-[#C59A4E]/40 relative overflow-hidden">
       {/* Decorative Golden Ambient Blur */}
       <div className="absolute top-0 right-0 w-96 h-96 rounded-full bg-[#C59A4E]/5 blur-3xl pointer-events-none" />
 
@@ -158,7 +158,6 @@ export const Footer: React.FC = () => {
               <li>
                 <Link href="/collections/offer-zone" className="hover:text-[#DFB873] transition-colors flex items-center gap-1.5">
                   <span>Festive Offer Zone</span>
-                  <span className="px-1.5 py-0.2 bg-[#DA3F3F] text-white text-[9px] font-bold rounded">HOT</span>
                 </Link>
               </li>
             </ul>
@@ -211,7 +210,7 @@ export const Footer: React.FC = () => {
             <div className="space-y-2.5 text-xs text-[#FCF3ED]/80">
               <p className="flex items-start gap-2">
                 <MapPin className="w-4 h-4 text-[#DFB873] shrink-0 mt-0.5" />
-                <span>Shopin Showroom, Main Market Road, Godavarikhani, Telangana - 505209</span>
+                <span>Shopin Showroom, Reddy colony, Warangal, Telangana - 505209</span>
               </p>
               <p className="flex items-center gap-2">
                 <Phone className="w-4 h-4 text-[#DFB873] shrink-0" />
@@ -240,11 +239,7 @@ export const Footer: React.FC = () => {
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-[#FCF3ED]/60 gap-4">
           <p>© {new Date().getFullYear()} Shopin Showroom. Handcrafted with pride in India.</p>
           <div className="flex items-center gap-3">
-            <span className="flex items-center gap-1">
-              <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-              <span>256-Bit SSL Encrypted</span>
-            </span>
-            <span>•</span>
+            
             <span>🇮🇳 100% Authentic Indian Weaves</span>
           </div>
         </div>

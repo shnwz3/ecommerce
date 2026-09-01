@@ -92,9 +92,9 @@ export const ProductDetailClientView: React.FC<ProductDetailClientViewProps> = (
   const currentPrice = product.sale_price || product.price;
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
+    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
       {/* LEFT: Multi-Image Thumbnail & Main Gallery (7 Columns) */}
-      <div className="lg:col-span-7 flex flex-col-reverse sm:flex-row gap-4">
+      <div className="lg:col-span-7 flex flex-col-reverse sm:flex-row gap-4 self-start lg:sticky lg:top-28">
         {/* Thumbnails list */}
         {images.length > 1 && (
           <div className="flex sm:flex-col gap-3 overflow-x-auto sm:overflow-y-auto no-scrollbar sm:w-20 shrink-0">
@@ -102,7 +102,7 @@ export const ProductDetailClientView: React.FC<ProductDetailClientViewProps> = (
               <button
                 key={idx}
                 onClick={() => setSelectedImage(img)}
-                className={`relative w-16 h-20 sm:w-20 sm:h-24 rounded-xl overflow-hidden border-2 transition-all shrink-0 bg-[#F8EFEA] ${
+                className={`relative w-16 h-20 sm:w-20 sm:h-24 rounded-xl overflow-hidden border-2 transition-all shrink-0 bg-[#FAF5EE] ${
                   selectedImage === img
                     ? "border-[#7B3D14] shadow-md scale-105"
                     : "border-transparent opacity-75 hover:opacity-100"
@@ -121,8 +121,8 @@ export const ProductDetailClientView: React.FC<ProductDetailClientViewProps> = (
         )}
 
         {/* Main Image Viewer with Aspect Ratio */}
-        <div className="relative flex-1 rounded-3xl overflow-hidden bg-[#F8EFEA] border border-[#7B3D14]/15 shadow-md group">
-          <div className="relative pt-[125%] w-full">
+        <div className="relative flex-1 rounded-3xl overflow-hidden bg-[#FAF5EE] border-2 border-[#C59A4E]/30 shadow-xl group">
+          <div className="relative aspect-[3/4] w-full">
             <Image
               src={selectedImage}
               alt={product.name}

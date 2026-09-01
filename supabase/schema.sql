@@ -112,7 +112,7 @@ INSERT INTO collections (name, slug, image_url, description) VALUES
 ('Lehengas', 'lehengas', 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?q=80&w=800&auto=format&fit=crop', 'Bridal & Party Wear Embroidered Lehengas'),
 ('Fancy Sarees', 'fancy-sarees', 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=800&auto=format&fit=crop', 'Contemporary lightweight & shimmer party sarees'),
 ('Designer Sarees', 'designer-sarees', 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?q=80&w=800&auto=format&fit=crop', 'Handcrafted designer drape collections'),
-('Pattu Sarees', 'pattu-sarees', 'https://images.unsplash.com/photo-1609357605129-26f69add5d6e?q=80&w=800&auto=format&fit=crop', 'Traditional pure silk Kanchipuram & Banarasi weaves'),
+('Pattu Sarees', 'pattu-sarees', 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?q=80&w=800&auto=format&fit=crop', 'Traditional pure silk Kanchipuram & Banarasi weaves'),
 ('Work Sarees', 'work-sarees', 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?q=80&w=800&auto=format&fit=crop', 'Intricate zardozi, sequin, and thread embroidery sarees');
 
 -- Seed 8 Realistic Products
@@ -126,7 +126,7 @@ INSERT INTO products (name, slug, description, price, sale_price, image_url, gal
   'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=800&auto=format&fit=crop',
   ARRAY[
     'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=800&auto=format&fit=crop',
-    'https://images.unsplash.com/photo-1609357605129-26f69add5d6e?q=80&w=800&auto=format&fit=crop'
+    'https://images.unsplash.com/photo-1595777457583-95e059d581b8?q=80&w=800&auto=format&fit=crop'
   ],
   'pattu-sarees',
   ARRAY['Free Size'],
@@ -157,9 +157,9 @@ INSERT INTO products (name, slug, description, price, sale_price, image_url, gal
   'Lightweight semi-silk saree adorned with temple borders and geometric woven patterns. Effortless to drape for day festivals and family functions.',
   1899,
   555,
-  'https://images.unsplash.com/photo-1609357605129-26f69add5d6e?q=80&w=800&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1595777457583-95e059d581b8?q=80&w=800&auto=format&fit=crop',
   ARRAY[
-    'https://images.unsplash.com/photo-1609357605129-26f69add5d6e?q=80&w=800&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1595777457583-95e059d581b8?q=80&w=800&auto=format&fit=crop',
     'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=800&auto=format&fit=crop'
   ],
   'fancy-sarees',
@@ -194,7 +194,7 @@ INSERT INTO products (name, slug, description, price, sale_price, image_url, gal
   'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?q=80&w=800&auto=format&fit=crop',
   ARRAY[
     'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?q=80&w=800&auto=format&fit=crop',
-    'https://images.unsplash.com/photo-1609357605129-26f69add5d6e?q=80&w=800&auto=format&fit=crop'
+    'https://images.unsplash.com/photo-1595777457583-95e059d581b8?q=80&w=800&auto=format&fit=crop'
   ],
   'fancy-sarees',
   ARRAY['Free Size'],
@@ -274,7 +274,7 @@ INSERT INTO banners (image_url, link_url, title, subtitle, cta_text, position, s
   2
 ),
 (
-  'https://images.unsplash.com/photo-1609357605129-26f69add5d6e?q=80&w=1600&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?q=80&w=1600&auto=format&fit=crop',
   '/collections/designer-sarees',
   'Pure Elegance in Every Drape',
   'Honest Prices Since 1996 • Direct from Artisans',

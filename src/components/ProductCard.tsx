@@ -6,6 +6,7 @@ import Link from "next/link";
 import { Heart, ShoppingBag, Eye, Sparkles } from "lucide-react";
 import { Product } from "@/lib/types";
 import { useStore } from "@/context/StoreContext";
+import { LotusMedallion } from "./ui/RoyalMotifs";
 
 interface ProductCardProps {
   product: Product;
@@ -28,12 +29,16 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
   return (
     <div
-      className="group relative flex flex-col bg-white rounded-2xl overflow-hidden border border-[#7B3D14]/15 shadow-sm hover:shadow-xl hover:border-[#7B3D14]/30 transition-all duration-300 hover:-translate-y-1"
+      className="group relative flex flex-col bg-white rounded-2xl overflow-hidden border border-[#C59A4E]/25 shadow-sm hover:shadow-2xl hover:border-[#C59A4E] transition-all duration-500 hover:-translate-y-1.5"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {/* Media Container with 3:4 Portrait Ratio */}
-      <div className="relative w-full pt-[132%] bg-[#F8EFEA] overflow-hidden">
+      {/* Clickable Image Container with 3:4 Portrait Ratio */}
+      <Link
+        href={`/products/${product.slug}`}
+        className="block relative w-full pt-[132%] bg-[#FAF5EE] overflow-hidden cursor-pointer"
+        aria-label={`View ${product.name}`}
+      >
         {/* Primary Image */}
         <Image
           src={product.image_url}
@@ -41,7 +46,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           fill
           sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
           className={`object-cover object-top transition-all duration-700 ease-out ${
-            secondaryImage && isHovered ? "opacity-0 scale-105" : "opacity-100 scale-100 group-hover:scale-105"
+            secondaryImage && isHovered
+              ? "opacity-0 scale-105"
+              : "opacity-100 scale-100 group-hover:scale-105"
           }`}
         />
 
@@ -59,19 +66,19 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         )}
 
         {/* Badges Container (Top Left) */}
-        <div className="absolute top-2.5 left-2.5 flex flex-col gap-1.5 z-10">
+        <div className="absolute top-2.5 left-2.5 flex flex-col gap-1.5 z-10 pointer-events-none">
           {!product.in_stock && (
             <span className="px-2.5 py-0.5 bg-[#341B09]/90 text-[#FCF3ED] text-[10px] font-bold rounded-full uppercase tracking-wider shadow-sm">
               Sold Out
             </span>
           )}
           {product.sale_price && product.in_stock && (
-            <span className="px-2.5 py-0.5 bg-[#DA3F3F] text-white text-[10px] font-bold rounded-full uppercase tracking-wider shadow-md">
+            <span className="px-2.5 py-0.5 bg-[#4A0E17] text-[#DFB873] border border-[#DFB873]/50 text-[10px] font-bold rounded-full uppercase tracking-wider shadow-md">
               {discountPercent}% OFF
             </span>
           )}
           {product.is_bestseller && product.in_stock && (
-            <span className="px-2 py-0.5 bg-[#7B3D14] text-[#FCF3ED] text-[10px] font-semibold rounded-full uppercase tracking-wider shadow-md flex items-center gap-1">
+            <span className="px-2.5 py-0.5 bg-[#7B3D14] text-[#FCF3ED] text-[10px] font-semibold rounded-full uppercase tracking-wider shadow-md flex items-center gap-1">
               <Sparkles className="w-2.5 h-2.5 text-[#DFB873]" />
               <span>Bestseller</span>
             </span>
@@ -85,7 +92,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             e.stopPropagation();
             toggleWishlist(product.id);
           }}
-          className="absolute top-2.5 right-2.5 z-10 w-8 h-8 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center text-[#341B09] hover:text-[#DA3F3F] hover:bg-white transition-all shadow-md group-hover:scale-110"
+          className="absolute top-2.5 right-2.5 z-20 w-8 h-8 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center text-[#341B09] hover:text-[#DA3F3F] hover:bg-white transition-all shadow-md group-hover:scale-110"
           aria-label="Toggle Wishlist"
         >
           <Heart
@@ -95,8 +102,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           />
         </button>
 
-        {/* Desktop Quick Actions Overlay (Appears on Hover) */}
-        <div className="hidden lg:flex absolute bottom-3 inset-x-3 z-10 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300 gap-2">
+        {/* Desktop Quick Actions Overlay */}
+        <div className="hidden lg:flex absolute bottom-3 inset-x-3 z-20 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300 gap-2">
           <button
             onClick={(e) => {
               e.preventDefault();
@@ -111,24 +118,27 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             }`}
           >
             <ShoppingBag className="w-3.5 h-3.5" />
-            <span>{product.in_stock ? "Quick Add" : "Out of Stock"}</span>
+            <span>{product.in_stock ? "Add to Bag" : "Out of Stock"}</span>
           </button>
-          <Link
-            href={`/products/${product.slug}`}
-            className="p-2.5 bg-white/95 hover:bg-white text-[#341B09] hover:text-[#7B3D14] rounded-xl shadow-xl transition-colors flex items-center justify-center"
+          <span
+            className="p-2.5 bg-white/95 hover:bg-white text-[#341B09] hover:text-[#7B3D14] rounded-xl shadow-xl transition-colors flex items-center justify-center border border-[#C59A4E]/30"
             title="View Details"
           >
             <Eye className="w-4 h-4" />
-          </Link>
+          </span>
         </div>
-      </div>
+      </Link>
 
       {/* Product Details Section */}
       <div className="p-3.5 sm:p-4 flex flex-col flex-1 justify-between bg-white">
         <div>
-          <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-widest text-[#7B3D14] capitalize">
-            {product.category.replace("-", " ")}
-          </span>
+          <div className="flex items-center gap-1 text-[#8E4718]">
+            <LotusMedallion className="w-2.5 h-2.5 text-[#C59A4E]" />
+            <span className="text-[10px] sm:text-xs font-bold uppercase tracking-widest text-[#8E4718] capitalize">
+              {product.category.replace("-", " ")}
+            </span>
+          </div>
+
           <Link href={`/products/${product.slug}`} className="block mt-1">
             <h3 className="font-serif-heading text-sm sm:text-base font-bold text-[#341B09] group-hover:text-[#7B3D14] transition-colors line-clamp-2 leading-snug">
               {product.name}
@@ -150,9 +160,13 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
           {/* Mobile Quick Add Button */}
           <button
-            onClick={() => addToCart(product)}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              addToCart(product);
+            }}
             disabled={!product.in_stock}
-            className="lg:hidden p-2 rounded-xl bg-[#FCF3ED] text-[#7B3D14] hover:bg-[#7B3D14] hover:text-white transition-colors shadow-sm"
+            className="lg:hidden p-2 rounded-xl bg-[#FAF5EE] text-[#7B3D14] hover:bg-[#7B3D14] hover:text-white transition-colors shadow-sm border border-[#C59A4E]/30"
             aria-label="Add to Bag"
           >
             <ShoppingBag className="w-4 h-4" />

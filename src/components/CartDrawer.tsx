@@ -240,10 +240,7 @@ export const CartDrawer: React.FC = () => {
                 </a>
               </div>
 
-              <div className="flex items-center justify-center gap-2 text-[10px] text-[#341B09]/60 pt-1">
-                <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-                <span>256-Bit SSL Encrypted • 7-Day Easy Returns Guaranteed</span>
-              </div>
+             
             </div>
           )}
         </div>

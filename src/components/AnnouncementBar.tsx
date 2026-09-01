@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, X } from "lucide-react";
 
 const announcements = [
   "✨ Sarees & Lehengas from ₹300 – Honest Prices Since 1996",
@@ -12,40 +12,58 @@ const announcements = [
 
 export const AnnouncementBar: React.FC = () => {
   const [current, setCurrent] = useState(0);
+  const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
+    if (!isVisible) return;
     const timer = setInterval(() => {
       setCurrent((prev) => (prev + 1) % announcements.length);
     }, 4000);
     return () => clearInterval(timer);
-  }, []);
+  }, [isVisible]);
+
+  if (!isVisible) return null;
 
   const next = () => setCurrent((prev) => (prev + 1) % announcements.length);
   const prev = () => setCurrent((prev) => (prev - 1 + announcements.length) % announcements.length);
 
   return (
-    <div className="bg-[#341B09] text-[#FCF3ED] text-xs md:text-sm font-medium tracking-wide py-2 px-4 relative flex items-center justify-between border-b border-[#7B3D14]/20 transition-all duration-300">
+    <div className="bg-[#241206] text-[#FCF3ED] text-xs sm:text-sm font-medium tracking-wide py-2 px-3 sm:px-6 relative flex items-center justify-between border-b border-[#C59A4E]/30 select-none animate-fade-in z-50">
+      {/* Left Navigation Arrow */}
       <button
         onClick={prev}
         aria-label="Previous announcement"
-        className="hidden md:flex p-1 hover:text-[#C59A4E] transition-colors"
+        className="hidden md:flex p-1 text-[#DFB873]/70 hover:text-[#DFB873] transition-colors focus:outline-none"
       >
         <ChevronLeft className="w-4 h-4" />
       </button>
 
-      <div className="w-full text-center truncate px-2">
-        <span className="inline-block transition-opacity duration-500">
+      {/* Rotating Announcement Message */}
+      <div className="w-full text-center truncate px-2 sm:px-8">
+        <span className="inline-block transition-opacity duration-500 font-serif-heading sm:font-sans tracking-wide">
           {announcements[current]}
         </span>
       </div>
 
-      <button
-        onClick={next}
-        aria-label="Next announcement"
-        className="hidden md:flex p-1 hover:text-[#C59A4E] transition-colors"
-      >
-        <ChevronRight className="w-4 h-4" />
-      </button>
+      {/* Right Controls: Next Arrow + Dismiss Button */}
+      <div className="flex items-center gap-2 shrink-0">
+        <button
+          onClick={next}
+          aria-label="Next announcement"
+          className="hidden md:flex p-1 text-[#DFB873]/70 hover:text-[#DFB873] transition-colors focus:outline-none"
+        >
+          <ChevronRight className="w-4 h-4" />
+        </button>
+
+        <button
+          onClick={() => setIsVisible(false)}
+          aria-label="Close announcement bar"
+          className="p-1 rounded-full text-[#DFB873]/70 hover:text-white hover:bg-white/10 transition-colors focus:outline-none ml-1"
+          title="Dismiss banner"
+        >
+          <X className="w-3.5 h-3.5" />
+        </button>
+      </div>
     </div>
   );
 };

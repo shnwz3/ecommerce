@@ -2,64 +2,63 @@
 
 import React from "react";
 import Link from "next/link";
-import { ArrowRight, Tag } from "lucide-react";
+import { ArrowRight, Tag, Sparkles } from "lucide-react";
+import { RoyalDivider, LotusMedallion, CornerFiligree } from "./ui/RoyalMotifs";
 
 interface PriceRange {
   title: string;
   price: string;
   tagline: string;
   gradient: string;
+  borderAccent: string;
   href: string;
 }
 
 const priceRanges: PriceRange[] = [
   {
-    title: "Pocket Friendly",
+    title: "Daily Grace",
     price: "UNDER ₹499",
-    tagline: "Everyday Daily Wear Sarees",
-    gradient: "from-[#7B3D14] to-[#A0522D]",
+    tagline: "Everyday Handloom & Lightweight Sarees",
+    gradient: "from-[#5B2A0A] via-[#7B3D14] to-[#4A0E17]",
+    borderAccent: "border-[#DFB873]/30",
     href: "/collections/all?maxPrice=499",
   },
   {
-    title: "Festive Value",
+    title: "Festive Splendor",
     price: "UNDER ₹999",
-    tagline: "Trending Fancy & Work Sarees",
-    gradient: "from-[#9C381E] to-[#7B3D14]",
+    tagline: "Trending Fancy Silks & Work Sarees",
+    gradient: "from-[#7B1113] via-[#8E2800] to-[#58111A]",
+    borderAccent: "border-[#DFB873]/40",
     href: "/collections/all?maxPrice=999",
   },
   {
-    title: "Occasion Special",
+    title: "Grand Occasions",
     price: "UNDER ₹1,499",
-    tagline: "Organza & Designer Sarees",
-    gradient: "from-[#341B09] to-[#602711]",
+    tagline: "Organza Cutwork & Designer Sarees",
+    gradient: "from-[#341B09] via-[#4A0E17] to-[#200408]",
+    borderAccent: "border-[#DFB873]/40",
     href: "/collections/all?maxPrice=1499",
   },
   {
-    title: "Royal Boutique",
+    title: "Royal Couture",
     price: "UNDER ₹2,499",
-    tagline: "Silk Pattu & Bridal Lehengas",
-    gradient: "from-[#5B2A0A] to-[#8B4513]",
+    tagline: "Pure Kanchi Pattu & Bridal Vault",
+    gradient: "from-[#2A1002] via-[#5E2C0C] to-[#34070D]",
+    borderAccent: "border-[#DFB873]/50",
     href: "/collections/all?maxPrice=2499",
   },
 ];
 
 export const ShopByPrice: React.FC = () => {
   return (
-    <section className="py-12 sm:py-16 bg-[#F8EFEA] border-y border-[#7B3D14]/10">
+    <section className="py-14 sm:py-20 bg-[#FAF5EE] border-b border-[#7B3D14]/15">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
-        <div className="text-center max-w-xl mx-auto mb-8 sm:mb-12">
-          <span className="text-xs font-bold uppercase tracking-[0.2em] text-[#7B3D14]">
-            Budget Friendly Curation
-          </span>
-          <h2 className="font-serif-heading text-2xl sm:text-4xl font-bold text-[#341B09] mt-1.5">
-            Shop By Price
-          </h2>
-          <p className="text-xs sm:text-sm text-[#341B09]/70 mt-2">
-            Unbeatable prices direct from weavers — luxury for every budget.
-          </p>
-          <div className="w-12 h-0.5 bg-[#7B3D14] mx-auto mt-3 rounded-full opacity-60" />
-        </div>
+        {/* Royal Section Header */}
+        <RoyalDivider
+          kicker="Royal Treasury"
+          title="Shop By Price & Budget"
+          subtitle="Direct from master weavers — uncompromised royal elegance for every celebration."
+        />
 
         {/* 4 Price Tiles Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
@@ -67,28 +66,34 @@ export const ShopByPrice: React.FC = () => {
             <Link
               key={idx}
               href={range.href}
-              className={`group relative rounded-2xl p-6 bg-gradient-to-br ${range.gradient} text-white shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 overflow-hidden border border-white/15 flex flex-col justify-between min-h-[170px]`}
+              className={`group relative rounded-3xl p-6 sm:p-7 bg-gradient-to-br ${range.gradient} text-white shadow-xl hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-500 overflow-hidden border ${range.borderAccent} flex flex-col justify-between min-h-[190px]`}
             >
-              {/* Subtle Decorative Circle */}
-              <div className="absolute -right-8 -bottom-8 w-28 h-28 rounded-full bg-white/10 blur-xl group-hover:scale-150 transition-transform" />
+              {/* Corner Filigree Ornaments */}
+              <CornerFiligree position="top-right" className="w-6 h-6 text-[#DFB873]/40" />
+
+              {/* Ambient Glow */}
+              <div className="absolute -right-8 -bottom-8 w-28 h-28 rounded-full bg-[#DFB873]/15 blur-xl group-hover:scale-150 transition-transform duration-700" />
 
               <div>
                 <div className="flex items-center justify-between">
-                  <span className="text-[11px] font-semibold uppercase tracking-wider text-[#C59A4E]">
-                    {range.title}
-                  </span>
-                  <Tag className="w-4 h-4 text-white/50 group-hover:text-white transition-colors" />
+                  <div className="flex items-center gap-1.5 text-[#DFB873]">
+                    <LotusMedallion className="w-3.5 h-3.5 text-[#DFB873]" />
+                    <span className="text-[11px] font-bold uppercase tracking-wider">
+                      {range.title}
+                    </span>
+                  </div>
+                  <Tag className="w-4 h-4 text-[#DFB873]/60 group-hover:text-[#DFB873] transition-colors" />
                 </div>
 
-                <h3 className="font-serif-heading text-2xl sm:text-3xl font-extrabold text-white mt-2 tracking-tight">
+                <h3 className="font-serif-heading text-2xl sm:text-3xl font-extrabold text-[#DFB873] mt-2.5 tracking-tight">
                   {range.price}
                 </h3>
-                <p className="text-xs text-white/80 mt-1">{range.tagline}</p>
+                <p className="text-xs text-[#FCF3ED]/80 mt-1 leading-relaxed">{range.tagline}</p>
               </div>
 
               <div className="pt-4 flex items-center justify-between text-xs font-bold text-[#FCF3ED] border-t border-white/15 mt-3">
-                <span>Browse Category</span>
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                <span className="group-hover:text-[#DFB873] transition-colors">Browse Category</span>
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 text-[#DFB873] transition-transform" />
               </div>
             </Link>
           ))}

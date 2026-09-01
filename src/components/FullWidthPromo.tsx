@@ -3,8 +3,9 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, Award } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Banner } from "@/lib/types";
+import { CornerFiligree, LotusMedallion } from "./ui/RoyalMotifs";
 
 interface FullWidthPromoProps {
   banners: Banner[];
@@ -13,52 +14,62 @@ interface FullWidthPromoProps {
 export const FullWidthPromo: React.FC<FullWidthPromoProps> = ({ banners }) => {
   const promo = banners.find((b) => b.position === "full-promo") || {
     id: "full-fallback",
-    image_url: "https://images.unsplash.com/photo-1609357605129-26f69add5d6e?q=80&w=1600&auto=format&fit=crop",
+    image_url:
+      "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?q=80&w=1600&auto=format&fit=crop",
     link_url: "/collections/designer-sarees",
     title: "Pure Elegance in Every Drape",
-    subtitle: "Honest Prices Since 1996 • Direct from Artisans",
-    cta_text: "Discover Collection",
+    subtitle: "Honest Loom Pricing Since 1996 • Handcrafted Direct from Master Artisans",
+    cta_text: "Discover Vault",
     position: "full-promo",
     sort_order: 1,
   };
 
   return (
-    <section className="py-8 sm:py-12 bg-[#FCF3ED]">
+    <section className="py-10 sm:py-14 bg-[#FAF5EE]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="relative rounded-3xl overflow-hidden shadow-2xl h-[340px] sm:h-[420px] border border-[#7B3D14]/20 flex items-center">
-          {/* Background Image */}
+        <div className="relative rounded-3xl overflow-hidden shadow-2xl h-[400px] sm:h-[480px] border-2 border-[#C59A4E]/40 flex items-center bg-[#1E0D05]">
+          {/* Background Image Anchored to the Right */}
           <Image
             src={promo.image_url}
             alt={promo.title || "Feature Banner"}
             fill
             sizes="100vw"
-            className="object-cover object-center"
+            className="object-cover object-[90%_20%] sm:object-[85%_20%] scale-100 transition-transform duration-1000"
           />
 
-          {/* Gradients */}
-          <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/50 to-transparent" />
+          {/* Directional Luxury Shadow Gradient */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#1E0D05] via-[#1E0D05]/50 to-transparent sm:hidden" />
+          <div className="absolute inset-0 hidden sm:block bg-gradient-to-r from-[#1E0D05]/95 via-[#1E0D05]/75 to-transparent/10 w-[65%]" />
 
-          {/* Content */}
-          <div className="relative z-10 max-w-lg px-8 sm:px-12 text-white space-y-4">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#C59A4E]/90 text-[#341B09] text-[11px] font-bold uppercase tracking-wider">
-              <Award className="w-3.5 h-3.5" />
-              <span>Artisan Heritage Spotlight</span>
+          {/* Ornate Inset Filigree Border */}
+          <div className="absolute inset-3 sm:inset-5 border border-[#DFB873]/30 pointer-events-none rounded-2xl z-10 hidden sm:block">
+            <CornerFiligree position="top-left" className="w-8 h-8 text-[#DFB873]/70" />
+            <CornerFiligree position="top-right" className="w-8 h-8 text-[#DFB873]/70" />
+            <CornerFiligree position="bottom-left" className="w-8 h-8 text-[#DFB873]/70" />
+            <CornerFiligree position="bottom-right" className="w-8 h-8 text-[#DFB873]/70" />
+          </div>
+
+          {/* Left Text Plaque */}
+          <div className="relative z-20 max-w-sm sm:max-w-md px-6 sm:px-12 text-white space-y-3.5 sm:space-y-4">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#4A0E17]/90 backdrop-blur-md border border-[#DFB873]/50 text-[#DFB873] text-[10px] sm:text-xs font-bold uppercase tracking-widest shadow-md">
+              <LotusMedallion className="w-3.5 h-3.5 text-[#DFB873]" />
+              <span>Artisan Loom Spotlight</span>
             </div>
 
-            <h2 className="font-serif-heading text-3xl sm:text-4xl md:text-5xl font-bold leading-tight">
+            <h2 className="font-serif-heading text-2xl sm:text-4xl md:text-5xl font-bold leading-[1.12] text-white">
               {promo.title}
             </h2>
 
-            <p className="text-xs sm:text-sm text-white/85 max-w-sm">
+            <p className="text-xs sm:text-sm text-[#FCF3ED]/85 font-light leading-relaxed">
               {promo.subtitle}
             </p>
 
             <div className="pt-2">
               <Link
                 href={promo.link_url || "/collections/all"}
-                className="inline-flex items-center gap-2 px-7 py-3 bg-[#7B3D14] hover:bg-[#632f0e] text-white rounded-full text-xs sm:text-sm font-semibold tracking-wider uppercase transition-all shadow-lg hover:shadow-xl hover:scale-105 border border-white/20"
+                className="royal-btn-gold inline-flex items-center gap-2 px-7 sm:px-8 py-3.5 rounded-full text-xs sm:text-sm font-bold uppercase tracking-wider transition-all shadow-xl hover:scale-105 border border-white/20"
               >
-                <span>{promo.cta_text || "Discover Collection"}</span>
+                <span>{promo.cta_text || "Discover Vault"}</span>
                 <ArrowRight className="w-4 h-4" />
               </Link>
             </div>

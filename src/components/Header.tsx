@@ -20,9 +20,22 @@ export const Header: React.FC = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const navLinks = [
+  interface NavItem {
+    name: string;
+    href: string;
+    badge?: string;
+    hasMega?: boolean;
+    subCategories?: Array<{
+      name: string;
+      href: string;
+      desc: string;
+      image: string;
+    }>;
+  }
+
+  const navLinks: NavItem[] = [
     { name: "Home", href: "/" },
-    { name: "Offer Zone", href: "/collections/offer-zone", badge: "HOT" },
+    { name: "Offer Zone", href: "/collections/offer-zone" },
     { name: "Shop All", href: "/collections/all" },
     {
       name: "Sarees",
@@ -64,7 +77,7 @@ export const Header: React.FC = () => {
           name: "Bridal Heritage Lehengas",
           href: "/collections/lehengas",
           desc: "Micro Velvet, Raw Silk & Heavy Can-can",
-          image: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?q=80&w=300&auto=format&fit=crop",
+          image: "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?q=80&w=300&auto=format&fit=crop",
         },
         {
           name: "Festive & Sangeet Sets",
