@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { MessageCircle, Phone, MapPin, Mail, ArrowRight, Crown, Check, ShieldCheck } from "lucide-react";
+import { MessageCircle, MapPin, Mail, ArrowRight, Crown, Check, ShieldCheck } from "lucide-react";
 
 export const Footer: React.FC = () => {
   const [newsletterEmail, setNewsletterEmail] = useState("");
@@ -213,16 +213,12 @@ export const Footer: React.FC = () => {
                 <span>Shopin Showroom, Reddy colony, Warangal, Telangana - 505209</span>
               </p>
               <p className="flex items-center gap-2">
-                <Phone className="w-4 h-4 text-[#DFB873] shrink-0" />
-                <span>+91 98480 00000 / +91 98480 11111</span>
-              </p>
-              <p className="flex items-center gap-2">
                 <Mail className="w-4 h-4 text-[#DFB873] shrink-0" />
                 <span>orders@shopin.com</span>
               </p>
               <div className="pt-2">
                 <a
-                  href="https://wa.me/919848000000"
+                  href="https://wa.me/?text=Hello%20Shopin%20Showroom,%20I%20am%20interested%20in%20your%20sarees"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#25D366] hover:bg-[#20ba59] text-white rounded-full text-xs font-bold transition-all shadow-md hover:scale-105"

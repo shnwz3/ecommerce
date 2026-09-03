@@ -27,7 +27,7 @@ export const MobileBottomNav: React.FC = () => {
     },
     {
       name: "WhatsApp",
-      href: "https://wa.me/919848000000?text=Hi%20Shopin%20Showroom,%20I%20would%20like%20to%20inquire%20about%20sarees",
+      href: "https://wa.me/?text=Hi%20Shopin%20Showroom,%20I%20would%20like%20to%20inquire%20about%20sarees",
       icon: MessageCircle,
       external: true,
     },

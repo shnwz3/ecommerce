@@ -315,7 +315,6 @@ export const Header: React.FC = () => {
 
             <div className="pt-6 border-t border-[#7B3D14]/15 text-xs text-[#341B09]/70 space-y-2">
               <p>📍 Godavarikhani, Telangana - 505209</p>
-              <p>📞 +91 98480 00000</p>
             </div>
           </div>
         </div>
