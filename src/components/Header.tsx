@@ -224,7 +224,7 @@ export const Header: React.FC = () => {
 
           {/* Wishlist Link */}
           <Link
-            href="/collections/all"
+            href="/collections/all?wishlist=true"
             aria-label="Wishlist"
             className="relative p-2 rounded-full hover:bg-white border border-transparent hover:border-[#7B3D14]/20 transition-all text-[#341B09] hover:text-[#DA3F3F] shrink-0"
           >

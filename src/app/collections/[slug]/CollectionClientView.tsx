@@ -1,10 +1,12 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
-import { Filter, ArrowUpDown, X, SlidersHorizontal, Check, ChevronDown } from "lucide-react";
+import { useSearchParams } from "next/navigation";
+import { Filter, ArrowUpDown, X, SlidersHorizontal, Check, ChevronDown, Heart } from "lucide-react";
 import { Product, Collection } from "@/lib/types";
 import { ProductCard } from "@/components/ProductCard";
+import { useStore } from "@/context/StoreContext";
 
 interface CollectionClientViewProps {
   initialProducts: Product[];
@@ -21,15 +23,31 @@ export const CollectionClientView: React.FC<CollectionClientViewProps> = ({
   categoryTitle,
   maxPriceParam,
 }) => {
+  const searchParams = useSearchParams();
+  const { wishlist } = useStore();
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [priceFilter, setPriceFilter] = useState<number | null>(maxPriceParam || null);
   const [inStockOnly, setInStockOnly] = useState(false);
+  const [wishlistOnly, setWishlistOnly] = useState(
+    searchParams?.get("wishlist") === "true" || searchParams?.get("likes") === "true"
+  );
   const [sortBy, setSortBy] = useState("featured");
+
+  useEffect(() => {
+    if (searchParams?.get("wishlist") === "true" || searchParams?.get("likes") === "true") {
+      setWishlistOnly(true);
+    }
+  }, [searchParams]);
 
   // Multi-dimensional filtering and sorting
   const filteredProducts = useMemo(() => {
     return initialProducts
       .filter((p) => {
+        // Liked / Wishlist filter
+        if (wishlistOnly && !wishlist.includes(p.id)) {
+          return false;
+        }
+
         // Slug/category match
         if (currentSlug !== "all" && currentSlug !== "offer-zone" && currentSlug !== "best-sellers") {
           if (p.category !== currentSlug) return false;
@@ -70,16 +88,17 @@ export const CollectionClientView: React.FC<CollectionClientViewProps> = ({
         if (sortBy === "newest") return (b.is_new ? 1 : 0) - (a.is_new ? 1 : 0);
         return 0; // featured default
       });
-  }, [initialProducts, selectedCategory, currentSlug, priceFilter, inStockOnly, sortBy]);
+  }, [initialProducts, selectedCategory, currentSlug, priceFilter, inStockOnly, wishlistOnly, wishlist, sortBy]);
 
   const resetFilters = () => {
     setSelectedCategory("all");
     setPriceFilter(null);
     setSortBy("featured");
     setInStockOnly(false);
+    setWishlistOnly(false);
   };
 
-  const hasActiveFilters = selectedCategory !== "all" || priceFilter !== null || inStockOnly;
+  const hasActiveFilters = selectedCategory !== "all" || priceFilter !== null || inStockOnly || wishlistOnly;
 
   return (
     <div>
@@ -141,6 +160,19 @@ export const CollectionClientView: React.FC<CollectionClientViewProps> = ({
             Under ₹1,999
           </button>
 
+          {/* Liked / Wishlist Filter Button */}
+          <button
+            onClick={() => setWishlistOnly(!wishlistOnly)}
+            className={`px-3.5 py-1.5 rounded-full text-xs font-semibold border transition-all flex items-center gap-1.5 shadow-2xs ${
+              wishlistOnly
+                ? "bg-[#DA3F3F] text-white border-[#DA3F3F] shadow-sm"
+                : "bg-white text-[#341B09] border-[#7B3D14]/20 hover:border-[#DA3F3F] hover:bg-rose-50/50"
+            }`}
+          >
+            <Heart className={`w-3.5 h-3.5 ${wishlistOnly ? "fill-white text-white" : "text-[#DA3F3F]"}`} />
+            <span>Liked ({wishlist.length})</span>
+          </button>
+
           {/* In Stock Toggle Button */}
           <button
             onClick={() => setInStockOnly(!inStockOnly)}
@@ -199,19 +231,25 @@ export const CollectionClientView: React.FC<CollectionClientViewProps> = ({
       {filteredProducts.length === 0 ? (
         <div className="text-center py-20 bg-white rounded-3xl border border-[#7B3D14]/15 shadow-sm p-8">
           <div className="w-16 h-16 rounded-full bg-[#FCF3ED] border border-[#7B3D14]/20 flex items-center justify-center mx-auto mb-4 text-[#7B3D14]">
-            <SlidersHorizontal className="w-8 h-8 opacity-70" />
+            {wishlistOnly ? (
+              <Heart className="w-8 h-8 fill-[#DA3F3F]/20 text-[#DA3F3F]" />
+            ) : (
+              <SlidersHorizontal className="w-8 h-8 opacity-70" />
+            )}
           </div>
           <h3 className="font-serif-heading text-xl font-bold text-[#341B09]">
-            No matching weaves found
+            {wishlistOnly ? "No liked weaves found" : "No matching weaves found"}
           </h3>
           <p className="text-xs sm:text-sm text-[#341B09]/60 mt-1 max-w-sm mx-auto">
-            Try loosening your price filters or exploring other categories.
+            {wishlistOnly
+              ? "Click the heart icon on any saree or lehenga while browsing to add your favorite pieces to your liked collection."
+              : "Try loosening your price filters or exploring other categories."}
           </p>
           <button
             onClick={resetFilters}
             className="mt-6 px-6 py-2.5 bg-[#7B3D14] text-white rounded-full text-xs font-semibold hover:bg-[#632f0e] transition-colors shadow-md"
           >
-            Clear All Filters
+            {wishlistOnly ? "Browse All Sarees" : "Clear All Filters"}
           </button>
         </div>
       ) : (

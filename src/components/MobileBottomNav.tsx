@@ -15,7 +15,7 @@ export const MobileBottomNav: React.FC = () => {
     { name: "Shop", href: "/collections/all", icon: Grid },
     {
       name: "Wishlist",
-      href: "/collections/all",
+      href: "/collections/all?wishlist=true",
       icon: Heart,
       badge: wishlist.length > 0 ? wishlist.length : null,
     },

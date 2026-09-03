@@ -103,12 +103,14 @@ export default async function CollectionPage({ params, searchParams }: PageProps
         </div>
 
         {/* Client Interactive Filter, Sort and Grid Component */}
-        <CollectionClientView
-          initialProducts={initialProducts}
-          allCollections={allCollections}
-          currentSlug={slug}
-          maxPriceParam={maxPriceParam}
-        />
+        <React.Suspense fallback={<div className="py-20 text-center text-[#7B3D14]">Loading weaves...</div>}>
+          <CollectionClientView
+            initialProducts={initialProducts}
+            allCollections={allCollections}
+            currentSlug={slug}
+            maxPriceParam={maxPriceParam}
+          />
+        </React.Suspense>
       </div>
     </main>
   );
