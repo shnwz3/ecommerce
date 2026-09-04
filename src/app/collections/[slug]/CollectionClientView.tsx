@@ -3,7 +3,7 @@
 import React, { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { Filter, ArrowUpDown, X, SlidersHorizontal, Check, ChevronDown, Heart } from "lucide-react";
+import { Filter, X, SlidersHorizontal, Check, ChevronDown, Heart } from "lucide-react";
 import { Product, Collection } from "@/lib/types";
 import { ProductCard } from "@/components/ProductCard";
 import { useStore } from "@/context/StoreContext";
@@ -16,17 +16,25 @@ interface CollectionClientViewProps {
   maxPriceParam?: number;
 }
 
+type PriceTier = "all" | "under-1500" | "1500-3500" | "above-3500";
+
 export const CollectionClientView: React.FC<CollectionClientViewProps> = ({
   initialProducts,
   allCollections,
   currentSlug,
-  categoryTitle,
   maxPriceParam,
 }) => {
   const searchParams = useSearchParams();
   const { wishlist } = useStore();
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
-  const [priceFilter, setPriceFilter] = useState<number | null>(maxPriceParam || null);
+  
+  // Price tier state
+  const [priceTier, setPriceTier] = useState<PriceTier>(() => {
+    if (maxPriceParam && maxPriceParam <= 1500) return "under-1500";
+    if (maxPriceParam && maxPriceParam <= 3500) return "1500-3500";
+    return "all";
+  });
+
   const [inStockOnly, setInStockOnly] = useState(false);
   const [wishlistOnly, setWishlistOnly] = useState(
     searchParams?.get("wishlist") === "true" || searchParams?.get("likes") === "true"
@@ -66,11 +74,11 @@ export const CollectionClientView: React.FC<CollectionClientViewProps> = ({
           return false;
         }
 
-        // Price Filter
-        if (priceFilter !== null) {
-          const effectivePrice = p.sale_price || p.price;
-          if (effectivePrice > priceFilter) return false;
-        }
+        // Price Tier Filter
+        const effectivePrice = p.sale_price || p.price;
+        if (priceTier === "under-1500" && effectivePrice > 1500) return false;
+        if (priceTier === "1500-3500" && (effectivePrice < 1500 || effectivePrice > 3500)) return false;
+        if (priceTier === "above-3500" && effectivePrice < 3500) return false;
 
         // Stock Filter
         if (inStockOnly && !p.in_stock) {
@@ -88,17 +96,17 @@ export const CollectionClientView: React.FC<CollectionClientViewProps> = ({
         if (sortBy === "newest") return (b.is_new ? 1 : 0) - (a.is_new ? 1 : 0);
         return 0; // featured default
       });
-  }, [initialProducts, selectedCategory, currentSlug, priceFilter, inStockOnly, wishlistOnly, wishlist, sortBy]);
+  }, [initialProducts, selectedCategory, currentSlug, priceTier, inStockOnly, wishlistOnly, wishlist, sortBy]);
 
   const resetFilters = () => {
     setSelectedCategory("all");
-    setPriceFilter(null);
+    setPriceTier("all");
     setSortBy("featured");
     setInStockOnly(false);
     setWishlistOnly(false);
   };
 
-  const hasActiveFilters = selectedCategory !== "all" || priceFilter !== null || inStockOnly || wishlistOnly;
+  const hasActiveFilters = selectedCategory !== "all" || priceTier !== "all" || inStockOnly || wishlistOnly;
 
   return (
     <div>
@@ -106,22 +114,22 @@ export const CollectionClientView: React.FC<CollectionClientViewProps> = ({
       <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pb-4 mb-6">
         <Link
           href="/collections/all"
-          className={`px-4 py-2 rounded-full text-xs font-bold whitespace-nowrap transition-all border ${
+          className={`px-4 py-2 rounded-full text-xs font-serif tracking-wider uppercase whitespace-nowrap transition-all border ${
             currentSlug === "all" && selectedCategory === "all"
-              ? "bg-[#7B3D14] text-white border-[#7B3D14] shadow-md"
-              : "bg-white text-[#341B09] border-[#7B3D14]/20 hover:border-[#7B3D14] hover:bg-[#FCF3ED]/60"
+              ? "bg-[#7B3D14] text-white border-[#7B3D14] shadow-md font-semibold"
+              : "bg-white text-[#341B09] border-[#7B3D14]/20 hover:border-[#7B3D14] hover:bg-[#FCF3ED]/60 font-medium"
           }`}
         >
-          All Items ({initialProducts.length})
+          All Silks ({initialProducts.length})
         </Link>
         {allCollections.map((col) => (
           <Link
             key={col.slug}
             href={`/collections/${col.slug}`}
-            className={`px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-all border ${
+            className={`px-4 py-2 rounded-full text-xs font-serif tracking-wider uppercase whitespace-nowrap transition-all border ${
               currentSlug === col.slug
-                ? "bg-[#7B3D14] text-white border-[#7B3D14] shadow-md"
-                : "bg-white text-[#341B09] border-[#7B3D14]/20 hover:border-[#7B3D14] hover:bg-[#FCF3ED]/60"
+                ? "bg-[#7B3D14] text-white border-[#7B3D14] shadow-md font-semibold"
+                : "bg-white text-[#341B09] border-[#7B3D14]/20 hover:border-[#7B3D14] hover:bg-[#FCF3ED]/60 font-medium"
             }`}
           >
             {col.name}
@@ -130,56 +138,68 @@ export const CollectionClientView: React.FC<CollectionClientViewProps> = ({
       </div>
 
       {/* Control Bar: Modern Luxury Filters & Sort Toolbar */}
-      <div className="bg-white/90 backdrop-blur-md rounded-2xl px-4 sm:px-6 py-3.5 border border-[#7B3D14]/15 shadow-sm mb-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        {/* Left: Quick Filters */}
+      <div className="bg-white/95 backdrop-blur-md rounded-2xl px-4 sm:px-6 py-4 border border-[#7B3D14]/15 shadow-sm mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        {/* Left: Quick Filter Pills */}
         <div className="flex flex-wrap items-center gap-2 text-xs">
-          <div className="flex items-center gap-1.5 font-bold text-[#7B3D14] mr-1">
+          <div className="flex items-center gap-1.5 font-serif text-[#7B3D14] uppercase tracking-wider text-[11px] font-bold mr-1">
             <Filter className="w-3.5 h-3.5 text-[#7B3D14]" />
-            <span>Filters:</span>
+            <span>Price:</span>
           </div>
 
           {/* Price Range Buttons */}
           <button
-            onClick={() => setPriceFilter(priceFilter === 999 ? null : 999)}
-            className={`px-3.5 py-1.5 rounded-full text-xs font-semibold border transition-all shadow-2xs ${
-              priceFilter === 999
-                ? "bg-[#7B3D14] text-white border-[#7B3D14] shadow-sm"
-                : "bg-white text-[#341B09] border-[#7B3D14]/20 hover:border-[#7B3D14] hover:bg-[#FCF3ED]/50"
+            onClick={() => setPriceTier(priceTier === "under-1500" ? "all" : "under-1500")}
+            className={`px-3.5 py-1.5 rounded-full text-xs font-medium border transition-all ${
+              priceTier === "under-1500"
+                ? "bg-[#7B3D14] text-white border-[#7B3D14] shadow-sm font-semibold"
+                : "bg-[#FAF7F2] text-[#341B09] border-[#7B3D14]/20 hover:border-[#7B3D14] hover:bg-white"
             }`}
           >
-            Under ₹999
+            Under ₹1,500
           </button>
           <button
-            onClick={() => setPriceFilter(priceFilter === 1999 ? null : 1999)}
-            className={`px-3.5 py-1.5 rounded-full text-xs font-semibold border transition-all shadow-2xs ${
-              priceFilter === 1999
-                ? "bg-[#7B3D14] text-white border-[#7B3D14] shadow-sm"
-                : "bg-white text-[#341B09] border-[#7B3D14]/20 hover:border-[#7B3D14] hover:bg-[#FCF3ED]/50"
+            onClick={() => setPriceTier(priceTier === "1500-3500" ? "all" : "1500-3500")}
+            className={`px-3.5 py-1.5 rounded-full text-xs font-medium border transition-all ${
+              priceTier === "1500-3500"
+                ? "bg-[#7B3D14] text-white border-[#7B3D14] shadow-sm font-semibold"
+                : "bg-[#FAF7F2] text-[#341B09] border-[#7B3D14]/20 hover:border-[#7B3D14] hover:bg-white"
             }`}
           >
-            Under ₹1,999
+            ₹1,500 – ₹3,500
           </button>
+          <button
+            onClick={() => setPriceTier(priceTier === "above-3500" ? "all" : "above-3500")}
+            className={`px-3.5 py-1.5 rounded-full text-xs font-medium border transition-all ${
+              priceTier === "above-3500"
+                ? "bg-[#7B3D14] text-white border-[#7B3D14] shadow-sm font-semibold"
+                : "bg-[#FAF7F2] text-[#341B09] border-[#7B3D14]/20 hover:border-[#7B3D14] hover:bg-white"
+            }`}
+          >
+            ₹3,500 & Above
+          </button>
+
+          <span className="w-px h-5 bg-[#7B3D14]/20 mx-1 hidden sm:inline-block" />
 
           {/* Liked / Wishlist Filter Button */}
           <button
             onClick={() => setWishlistOnly(!wishlistOnly)}
-            className={`px-3.5 py-1.5 rounded-full text-xs font-semibold border transition-all flex items-center gap-1.5 shadow-2xs ${
+            className={`px-3.5 py-1.5 rounded-full text-xs font-medium border transition-all flex items-center gap-1.5 ${
               wishlistOnly
-                ? "bg-[#DA3F3F] text-white border-[#DA3F3F] shadow-sm"
-                : "bg-white text-[#341B09] border-[#7B3D14]/20 hover:border-[#DA3F3F] hover:bg-rose-50/50"
+                ? "bg-[#8C1D40] text-white border-[#8C1D40] shadow-sm font-semibold"
+                : "bg-[#FAF7F2] text-[#341B09] border-[#7B3D14]/20 hover:border-[#8C1D40] hover:bg-rose-50/50"
             }`}
           >
-            <Heart className={`w-3.5 h-3.5 ${wishlistOnly ? "fill-white text-white" : "text-[#DA3F3F]"}`} />
-            <span>Liked ({wishlist.length})</span>
+            <Heart className={`w-3.5 h-3.5 ${wishlistOnly ? "fill-white text-white" : "text-[#8C1D40]"}`} />
+            <span>Curated Liked ({wishlist.length})</span>
           </button>
 
           {/* In Stock Toggle Button */}
           <button
             onClick={() => setInStockOnly(!inStockOnly)}
-            className={`px-3.5 py-1.5 rounded-full text-xs font-semibold border transition-all flex items-center gap-1.5 shadow-2xs ${
+            className={`px-3.5 py-1.5 rounded-full text-xs font-medium border transition-all flex items-center gap-1.5 ${
               inStockOnly
-                ? "bg-[#7B3D14] text-white border-[#7B3D14] shadow-sm"
-                : "bg-white text-[#341B09] border-[#7B3D14]/20 hover:border-[#7B3D14] hover:bg-[#FCF3ED]/50"
+                ? "bg-[#7B3D14] text-white border-[#7B3D14] shadow-sm font-semibold"
+                : "bg-[#FAF7F2] text-[#341B09] border-[#7B3D14]/20 hover:border-[#7B3D14] hover:bg-white"
             }`}
           >
             <div
@@ -191,65 +211,111 @@ export const CollectionClientView: React.FC<CollectionClientViewProps> = ({
             >
               {inStockOnly && <Check className="w-2.5 h-2.5 stroke-[3]" />}
             </div>
-            <span>In Stock Only</span>
+            <span>Ready in Atelier</span>
           </button>
-
-          {hasActiveFilters && (
-            <button
-              onClick={resetFilters}
-              className="flex items-center gap-1 px-2.5 py-1 text-xs text-[#DA3F3F] hover:text-[#a82828] font-bold transition-colors ml-1"
-            >
-              <X className="w-3.5 h-3.5" />
-              <span>Reset</span>
-            </button>
-          )}
         </div>
 
         {/* Right: Sort By Dropdown & Count */}
         <div className="flex items-center justify-between sm:justify-end w-full sm:w-auto gap-4">
-          <span className="text-xs text-[#341B09]/70 font-medium">
-            Showing <strong className="text-[#341B09] font-bold">{filteredProducts.length}</strong> items
+          <span className="text-xs text-[#666666] font-light">
+            Displaying <strong className="text-[#1A1A1A] font-semibold">{filteredProducts.length}</strong> creations
           </span>
 
           <div className="relative flex items-center">
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
-              className="appearance-none bg-white border border-[#7B3D14]/25 rounded-full pl-3.5 pr-8 py-1.5 text-xs font-semibold text-[#341B09] focus:outline-none focus:border-[#7B3D14] shadow-2xs hover:border-[#7B3D14] cursor-pointer transition-colors"
+              className="appearance-none bg-[#FAF7F2] border border-[#7B3D14]/25 rounded-full pl-3.5 pr-8 py-1.5 text-xs font-serif text-[#341B09] focus:outline-none focus:border-[#7B3D14] hover:border-[#7B3D14] cursor-pointer transition-colors"
             >
-              <option value="featured">Sort: Featured</option>
+              <option value="featured">Sort: Featured Heirloom</option>
               <option value="price-low">Price: Low to High</option>
               <option value="price-high">Price: High to Low</option>
-              <option value="newest">Newest First</option>
+              <option value="newest">Newest from Loom</option>
             </select>
             <ChevronDown className="w-3.5 h-3.5 text-[#7B3D14] absolute right-3 pointer-events-none" />
           </div>
         </div>
       </div>
 
+      {/* Active Filter Chips Bar */}
+      {hasActiveFilters && (
+        <div className="flex flex-wrap items-center gap-2 mb-6 px-1">
+          <span className="text-xs text-[#666666] font-serif uppercase tracking-wider">Active:</span>
+          {priceTier !== "all" && (
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#E8DFC8]/50 border border-[#C59A4E]/40 text-xs text-[#341B09] font-medium">
+              <span>
+                {priceTier === "under-1500" && "Under ₹1,500"}
+                {priceTier === "1500-3500" && "₹1,500 – ₹3,500"}
+                {priceTier === "above-3500" && "₹3,500 & Above"}
+              </span>
+              <button
+                onClick={() => setPriceTier("all")}
+                className="hover:text-[#8C1D40] transition-colors"
+                aria-label="Remove price filter"
+              >
+                <X className="w-3 h-3" />
+              </button>
+            </span>
+          )}
+
+          {wishlistOnly && (
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#8C1D40]/10 border border-[#8C1D40]/30 text-xs text-[#8C1D40] font-medium">
+              <span>Liked Weaves</span>
+              <button
+                onClick={() => setWishlistOnly(false)}
+                className="hover:text-red-700 transition-colors"
+                aria-label="Remove wishlist filter"
+              >
+                <X className="w-3 h-3" />
+              </button>
+            </span>
+          )}
+
+          {inStockOnly && (
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-300 text-xs text-emerald-800 font-medium">
+              <span>Ready in Atelier</span>
+              <button
+                onClick={() => setInStockOnly(false)}
+                className="hover:text-emerald-950 transition-colors"
+                aria-label="Remove in-stock filter"
+              >
+                <X className="w-3 h-3" />
+              </button>
+            </span>
+          )}
+
+          <button
+            onClick={resetFilters}
+            className="text-xs text-[#8C1D40] hover:underline font-serif tracking-wider font-semibold ml-2"
+          >
+            Clear All
+          </button>
+        </div>
+      )}
+
       {/* Product Grid */}
       {filteredProducts.length === 0 ? (
         <div className="text-center py-20 bg-white rounded-3xl border border-[#7B3D14]/15 shadow-sm p-8">
           <div className="w-16 h-16 rounded-full bg-[#FCF3ED] border border-[#7B3D14]/20 flex items-center justify-center mx-auto mb-4 text-[#7B3D14]">
             {wishlistOnly ? (
-              <Heart className="w-8 h-8 fill-[#DA3F3F]/20 text-[#DA3F3F]" />
+              <Heart className="w-8 h-8 fill-[#8C1D40]/20 text-[#8C1D40]" />
             ) : (
               <SlidersHorizontal className="w-8 h-8 opacity-70" />
             )}
           </div>
-          <h3 className="font-serif-heading text-xl font-bold text-[#341B09]">
+          <h3 className="font-serif text-xl font-bold text-[#341B09]">
             {wishlistOnly ? "No liked weaves found" : "No matching weaves found"}
           </h3>
           <p className="text-xs sm:text-sm text-[#341B09]/60 mt-1 max-w-sm mx-auto">
             {wishlistOnly
-              ? "Click the heart icon on any saree or lehenga while browsing to add your favorite pieces to your liked collection."
-              : "Try loosening your price filters or exploring other categories."}
+              ? "Click the heart icon on any saree or lehenga while browsing to curate your private showroom favorites."
+              : "Try adjusting your price range or exploring other atelier collections."}
           </p>
           <button
             onClick={resetFilters}
-            className="mt-6 px-6 py-2.5 bg-[#7B3D14] text-white rounded-full text-xs font-semibold hover:bg-[#632f0e] transition-colors shadow-md"
+            className="mt-6 px-6 py-2.5 bg-[#7B3D14] text-white rounded-full text-xs font-serif uppercase tracking-wider hover:bg-[#632f0e] transition-colors shadow-md"
           >
-            {wishlistOnly ? "Browse All Sarees" : "Clear All Filters"}
+            {wishlistOnly ? "Browse All Weaves" : "Reset All Filters"}
           </button>
         </div>
       ) : (

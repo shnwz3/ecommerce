@@ -26,14 +26,14 @@ interface BannersManagerProps {
 }
 
 const POSITION_LABELS: Record<string, string> = {
-  hero: "🎠 Hero Slider",
-  "promo-1": "📢 Promo Left",
-  "promo-2": "📢 Promo Right",
-  "full-promo": "🖼️ Full-Width Promo",
-  "price-1": "💰 Shop by Price #1",
-  "price-2": "💰 Shop by Price #2",
-  "price-3": "💰 Shop by Price #3",
-  "price-4": "💰 Shop by Price #4",
+  hero: "Hero Slider",
+  "promo-1": "Promo Left",
+  "promo-2": "Promo Right",
+  "full-promo": "Full-Width Promo",
+  "price-1": "Occasion Highlight #1",
+  "price-2": "Occasion Highlight #2",
+  "price-3": "Occasion Highlight #3",
+  "price-4": "Occasion Highlight #4",
 };
 
 export const BannersManager: React.FC<BannersManagerProps> = ({

@@ -90,7 +90,7 @@ export const AdminShell: React.FC<AdminShellProps> = ({
               const newest = data.orders[0];
               setStatusNotice({
                 type: "success",
-                message: `🎉 New Order Received! #${newest.order_number} by ${newest.customer_name} (₹${newest.total.toLocaleString("en-IN")})`,
+                message: `New Order Received: #${newest.order_number} by ${newest.customer_name} (₹${newest.total.toLocaleString("en-IN")})`,
               });
             }
             return data.orders;

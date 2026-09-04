@@ -17,9 +17,9 @@ export const TwoUpPromo: React.FC<TwoUpPromoProps> = ({ banners }) => {
     image_url:
       "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?q=80&w=1000&auto=format&fit=crop",
     link_url: "/collections/fancy-sarees",
-    title: "Festive Grandeur Offer Zone",
-    subtitle: "Up to 70% Off on Trending Silk & Shimmer Party Drapes",
-    cta_text: "Claim Festive Offers",
+    title: "Artisanal Evening Drapes",
+    subtitle: "Lustrous shimmer silks and hand-embellished sequins designed for dusk celebrations.",
+    cta_text: "Explore Party Drapes",
     position: "promo-1",
     sort_order: 1,
   };
@@ -29,8 +29,8 @@ export const TwoUpPromo: React.FC<TwoUpPromoProps> = ({ banners }) => {
     image_url:
       "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?q=80&w=1000&auto=format&fit=crop",
     link_url: "/collections/lehengas",
-    title: "Royal Heritage Bridal Edit",
-    subtitle: "Hand-Embroidered Velvet & Georgette Lehengas from ₹3,999",
+    title: "The Royal Bridal Trousseau",
+    subtitle: "Handcrafted velvet kalis and heritage zardozi embroideries worthy of family heirlooms.",
     cta_text: "Explore Bridal Vault",
     position: "promo-2",
     sort_order: 2,

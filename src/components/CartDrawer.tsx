@@ -71,7 +71,7 @@ export const CartDrawer: React.FC = () => {
             {cartTotal >= 999 ? (
               <div className="flex items-center gap-2 text-xs font-bold text-emerald-800">
                 <Truck className="w-4 h-4 text-emerald-600 shrink-0" />
-                <span>🎉 Unlocked: Pan-India Free Express Shipping!</span>
+                <span>Unlocked: Pan-India Free Express Shipping!</span>
               </div>
             ) : (
               <div>

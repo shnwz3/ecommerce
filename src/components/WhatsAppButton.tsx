@@ -9,11 +9,11 @@ export const WhatsAppButton: React.FC = () => {
       href="https://wa.me/?text=Hello%20Shopin%20Showroom,%20I%20am%20interested%20in%20your%20sarees%20and%20lehengas"
       target="_blank"
       rel="noopener noreferrer"
-      aria-label="Chat on WhatsApp"
-      className="hidden lg:flex fixed bottom-8 right-8 z-40 items-center gap-2 px-4 py-3 bg-[#25D366] text-white rounded-full shadow-2xl hover:bg-[#20ba59] hover:scale-105 transition-all duration-300 group border border-white/20"
+      aria-label="Chat with Stylist on WhatsApp"
+      title="Chat with Stylist on WhatsApp"
+      className="hidden lg:flex fixed bottom-8 right-8 z-40 w-12 h-12 rounded-full bg-[#25D366] text-white shadow-xl hover:bg-[#20ba59] hover:scale-110 transition-all duration-300 items-center justify-center border border-white/20"
     >
-      <MessageCircle className="w-5 h-5 fill-white text-[#25D366]" />
-      <span className="text-xs font-bold tracking-wide">Chat with Stylist</span>
+      <MessageCircle className="w-6 h-6 fill-white text-[#25D366]" />
     </a>
   );
 };

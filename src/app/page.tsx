@@ -5,8 +5,7 @@ import { TwoUpPromo } from "@/components/TwoUpPromo";
 import { TabbedCarousel } from "@/components/TabbedCarousel";
 import { FullWidthPromo } from "@/components/FullWidthPromo";
 import { BestSellersGrid } from "@/components/BestSellersGrid";
-import { ShopByPrice } from "@/components/ShopByPrice";
-import { NewArrivalsGrid } from "@/components/NewArrivalsGrid";
+import ShopByOccasion from "@/components/ShopByOccasion";
 import { FeaturedVideos } from "@/components/FeaturedVideos";
 import { TrustBar } from "@/components/TrustBar";
 
@@ -39,13 +38,10 @@ export default async function HomePage() {
       {/* 6. Best Sellers Grid */}
       <BestSellersGrid products={products} />
 
-      {/* 7. Shop By Price Banners */}
-      <ShopByPrice />
+      {/* 7. Curated by Occasion */}
+      <ShopByOccasion />
 
-      {/* 8. New Arrivals Grid */}
-      <NewArrivalsGrid products={products} />
-
-      {/* 9. Featured Videos Carousel */}
+      {/* 8. Featured Videos Carousel */}
       <FeaturedVideos />
 
       {/* 10. Trust Bar */}

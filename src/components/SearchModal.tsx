@@ -82,9 +82,9 @@ export const SearchModal: React.FC = () => {
         {/* Quick Suggestion Pills */}
         <div className="px-5 py-3 bg-[#F8EFEA] border-b border-[#7B3D14]/10 flex items-center gap-2 overflow-x-auto no-scrollbar">
           <span className="text-[11px] font-bold text-[#7B3D14] uppercase tracking-wider shrink-0">
-            Popular:
+            Curated Tags:
           </span>
-          {["Pattu Sarees", "Bridal Lehengas", "Banarasi Silk", "Under ₹999", "Fancy Sarees"].map(
+          {["Pure Silk Pattu", "Bridal Lehengas", "Banarasi Silk", "Zardozi Work", "Organza Cutwork"].map(
             (tag, idx) => (
               <button
                 key={idx}

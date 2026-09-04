@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Search, Heart, ShoppingBag, Menu, X, ChevronDown, Sparkles, Crown } from "lucide-react";
+import { Search, Heart, ShoppingBag, Menu, X, ChevronDown, Sparkles, Crown, MapPin } from "lucide-react";
 import { useStore } from "@/context/StoreContext";
 
 export const Header: React.FC = () => {
@@ -150,7 +150,7 @@ export const Header: React.FC = () => {
                   <ChevronDown className="w-3.5 h-3.5 text-[#7B3D14] transition-transform duration-200 group-hover:rotate-180 shrink-0" />
                 )}
                 {link.badge && (
-                  <span className="ml-1 px-1.5 py-0.2 bg-[#DA3F3F] text-white text-[9px] font-extrabold rounded-full uppercase tracking-wider shadow-xs leading-none">
+                  <span className="ml-1 px-1.5 py-0.5 bg-[#7B3D14] text-[#DFB873] border border-[#DFB873]/30 text-[9px] font-bold rounded-full uppercase tracking-wider shadow-xs leading-none">
                     {link.badge}
                   </span>
                 )}
@@ -288,7 +288,7 @@ export const Header: React.FC = () => {
                     >
                       <span>{link.name}</span>
                       {link.badge && (
-                        <span className="px-2 py-0.5 bg-[#DA3F3F] text-white text-[10px] font-bold rounded">
+                        <span className="px-2 py-0.5 bg-[#7B3D14] text-[#DFB873] border border-[#DFB873]/30 text-[10px] font-bold rounded-full">
                           {link.badge}
                         </span>
                       )}
@@ -314,7 +314,10 @@ export const Header: React.FC = () => {
             </div>
 
             <div className="pt-6 border-t border-[#7B3D14]/15 text-xs text-[#341B09]/70 space-y-2">
-              <p>📍 Godavarikhani, Telangana - 505209</p>
+              <p className="flex items-center gap-1.5">
+                <MapPin className="w-3.5 h-3.5 text-[#7B3D14] shrink-0" />
+                <span>Godavarikhani, Telangana - 505209</span>
+              </p>
             </div>
           </div>
         </div>

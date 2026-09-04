@@ -130,7 +130,7 @@ export const ProductFormModal: React.FC<ProductFormModalProps> = ({
 
       if (res.success && res.product) {
         onSaved(res.product, true);
-        onStatusNotice({ type: "success", message: `✨ Product "${name}" updated successfully!` });
+        onStatusNotice({ type: "success", message: `Product "${name}" updated successfully.` });
       } else {
         onStatusNotice({ type: "error", message: res.error || "Failed to update product." });
       }
@@ -140,7 +140,7 @@ export const ProductFormModal: React.FC<ProductFormModalProps> = ({
 
       if (res.success && res.product) {
         onSaved(res.product, false);
-        onStatusNotice({ type: "success", message: `✨ Product "${name}" published live!` });
+        onStatusNotice({ type: "success", message: `Product "${name}" published live.` });
       } else {
         onStatusNotice({ type: "error", message: res.error || "Failed to create product." });
       }

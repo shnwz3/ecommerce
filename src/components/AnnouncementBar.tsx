@@ -4,10 +4,10 @@ import React, { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 
 const announcements = [
-  "✨ Sarees & Lehengas from ₹300 – Honest Prices Since 1996",
-  "🚚 Pan-India Free Express Shipping on Orders Above ₹999",
-  "🔄 Easy 7-Day Returns & Instant Refunds Available",
-  "💎 Handpicked Authentic Weaves • Direct From Master Artisans",
+  "Master Loom Heritage Since 1996 • Authentic Kanchipuram & Banarasi Weaves",
+  "Complimentary Insured Doorstep Delivery Across India on Orders Above ₹999",
+  "Direct Artisan Loom Pricing • Handcrafted Heirloom Textiles",
+  "Personalized Video Styling & Bridal Concierge via WhatsApp",
 ];
 
 export const AnnouncementBar: React.FC = () => {

@@ -95,7 +95,6 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       }
     });
 
-    showToast(`Added "${product.name}" to cart!`);
     setIsCartOpen(true);
   };
 
@@ -126,10 +125,8 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     setWishlist((prev) => {
       const exists = prev.includes(productId);
       if (exists) {
-        showToast("Removed from wishlist");
         return prev.filter((id) => id !== productId);
       } else {
-        showToast("Added to wishlist ❤️");
         return [...prev, productId];
       }
     });
@@ -164,19 +161,11 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         isInWishlist,
         cartCount,
         cartTotal,
-        toastMessage,
-        showToast,
+        toastMessage: null,
+        showToast: () => {},
       }}
     >
       {children}
-
-      {/* Global Toast Notification */}
-      {toastMessage && (
-        <div className="fixed bottom-20 md:bottom-8 left-1/2 -translate-x-1/2 z-50 bg-[#341B09] text-[#FCF3ED] px-5 py-2.5 rounded-full shadow-2xl text-sm font-medium flex items-center gap-2 animate-bounce border border-[#C59A4E]/30">
-          <span>✨</span>
-          <span>{toastMessage}</span>
-        </div>
-      )}
     </StoreContext.Provider>
   );
 };
