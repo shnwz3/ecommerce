@@ -8,9 +8,9 @@ export const TrustBar: React.FC = () => {
   const pillars = [
     {
       icon: Award,
-      title: "Silk Mark Certified Weaves",
-      desc: "100% authentic pure silk threads certified by master loom artisans",
-      badge: "Pure Silk Guarantee",
+      title: "Pure Handloom Weaves",
+      desc: "Authentic hand-woven textiles crafted by master loom artisans",
+      badge: "Heritage Craft",
     },
     {
       icon: Gem,
@@ -26,9 +26,9 @@ export const TrustBar: React.FC = () => {
     },
     {
       icon: ShieldCheck,
-      title: "256-Bit Encrypted Security",
-      desc: "100% secure payments via UPI, Cards, NetBanking & WhatsApp Stylist",
-      badge: "Bank-Grade SSL",
+      title: "Safe & Verified Checkout",
+      desc: "Encrypted checkout via UPI, NetBanking, Cards & WhatsApp concierge",
+      badge: "Secure Payments",
     },
   ];
 

@@ -13,6 +13,7 @@ import {
   Sparkles,
   Check,
   Share2,
+  MessageSquare,
 } from "lucide-react";
 import { Product } from "@/lib/types";
 import { useStore } from "@/context/StoreContext";
@@ -381,10 +382,33 @@ export const ProductDetailClientView: React.FC<ProductDetailClientViewProps> = (
             {openAccordions.faq && (
               <div className="px-5 pb-4 text-xs text-[#341B09]/80 leading-relaxed space-y-2">
                 <p><strong>Q: Does this saree include an unstitched blouse piece?</strong><br />A: Yes, all sarees include a running 0.8 meter matching unstitched blouse piece.</p>
-                <p><strong>Q: Are the photos real product photos?</strong><br />A: Yes, all photos showcase real products photographed under natural studio lighting.</p>
+                <p><strong>Q: How should I care for this garment?</strong><br />A: Dry clean only is recommended for all pure silk and zari weaves to preserve the natural sheen and delicate craftsmanship.</p>
               </div>
             )}
           </div>
+        </div>
+
+        {/* Customer Reviews Placeholder */}
+        <div className="bg-white rounded-2xl border border-[#7B3D14]/15 p-6 mt-6 text-center shadow-xs">
+          <div className="flex items-center justify-center gap-1 text-[#DFB873] mb-2">
+            {[...Array(5)].map((_, i) => (
+              <Star key={i} className="w-4 h-4 fill-[#DFB873]/30 text-[#DFB873]" />
+            ))}
+          </div>
+          <h4 className="font-serif-heading font-bold text-[#341B09] text-base mb-1">
+            Customer Reviews
+          </h4>
+          <p className="text-xs text-[#341B09]/70 mb-4 max-w-sm mx-auto">
+            No reviews yet for this handcrafted piece. Have you purchased this? Share your experience with future patrons.
+          </p>
+          <button
+            type="button"
+            onClick={() => alert("Review submission will be enabled after order verification.")}
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#7B3D14] hover:text-[#5E2C0C] bg-[#F8EFEA] hover:bg-[#F0DFD5] px-4 py-2 rounded-xl transition-colors cursor-pointer"
+          >
+            <MessageSquare className="w-3.5 h-3.5" />
+            <span>Write the First Review</span>
+          </button>
         </div>
       </div>
 

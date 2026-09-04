@@ -1,0 +1,30 @@
+[
+  {
+    "customer_name": "Ananya Sharma",
+    "customer_email": "customer@shopin.com",
+    "customer_phone": "+91 98765 12345",
+    "items": [
+      {
+        "product_name": "Designer Organza Floral Pastel Saree",
+        "product_image": "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb",
+        "price": 2499,
+        "quantity": 1,
+        "size": "Free Size"
+      }
+    ],
+    "total": 2499,
+    "subtotal": 2499,
+    "shipping_fee": 0,
+    "discount": 0,
+    "status": "pending",
+    "shipping_address": "Flat 101, Lakeview Apts",
+    "city": "Hyderabad",
+    "state": "State",
+    "pincode": "500001",
+    "payment_method": "COD",
+    "payment_status": "pending",
+    "id": "ord-1788522123924-3828",
+    "order_number": "ORD-2026-3828",
+    "created_at": "2026-09-04T11:42:03.926Z"
+  }
+]

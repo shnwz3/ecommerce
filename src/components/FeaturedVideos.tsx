@@ -3,9 +3,7 @@
 import React, { useState, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Play, Pause, Sparkles, X, Volume2, VolumeX, ArrowRight, ShoppingBag } from "lucide-react";
-import { useStore } from "@/context/StoreContext";
-import { RoyalDivider } from "./ui/RoyalMotifs";
+import { Play, Sparkles, X, Volume2, VolumeX, ArrowRight, ShoppingBag } from "lucide-react";
 
 interface VideoCard {
   id: string;
@@ -24,7 +22,7 @@ const mockVideos: VideoCard[] = [
     category: "Pattu Sarees",
     price: "₹1,699",
     thumbnail: "https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=800&auto=format&fit=crop",
-    videoUrl: "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+    videoUrl: "/videos/reel-1.mp4",
     link: "/products/royal-banarasi-katan-silk-saree",
   },
   {
@@ -33,7 +31,7 @@ const mockVideos: VideoCard[] = [
     category: "Lehengas",
     price: "₹4,999",
     thumbnail: "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?q=80&w=800&auto=format&fit=crop",
-    videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4",
+    videoUrl: "/videos/reel-2.mp4",
     link: "/products/maroon-velvet-embroidered-bridal-lehenga",
   },
   {
@@ -42,7 +40,7 @@ const mockVideos: VideoCard[] = [
     category: "Designer Sarees",
     price: "₹1,250",
     thumbnail: "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?q=80&w=800&auto=format&fit=crop",
-    videoUrl: "https://www.w3schools.com/html/movie.mp4",
+    videoUrl: "/videos/reel-3.mp4",
     link: "/products/designer-organza-floral-pastel-saree",
   },
   {
@@ -50,8 +48,8 @@ const mockVideos: VideoCard[] = [
     title: "Heritage Kanchipuram Silk & Zari Weave",
     category: "Pattu Sarees",
     price: "₹2,199",
-    thumbnail: "https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=800&auto=format&fit=crop",
-    videoUrl: "https://raw.githubusercontent.com/intel-iot-devkit/sample-videos/master/person-bicycle-car-detection.mp4",
+    thumbnail: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?q=80&w=800&auto=format&fit=crop",
+    videoUrl: "/videos/reel-4.mp4",
     link: "/products/kanchipuram-silk-saree-gold-border",
   },
 ];
@@ -69,11 +67,14 @@ const VideoItemCard: React.FC<VideoItemCardProps> = ({ video, onOpenModal }) => 
   const handleMouseEnter = () => {
     setIsHovered(true);
     if (videoRef.current) {
-      videoRef.current.play().then(() => {
-        setIsPlaying(true);
-      }).catch(() => {
-        // Autoplay may be restricted
-      });
+      videoRef.current
+        .play()
+        .then(() => {
+          setIsPlaying(true);
+        })
+        .catch(() => {
+          // Autoplay policy fallback
+        });
     }
   };
 
@@ -93,7 +94,7 @@ const VideoItemCard: React.FC<VideoItemCardProps> = ({ video, onOpenModal }) => 
       onMouseLeave={handleMouseLeave}
       onClick={() => onOpenModal(video)}
     >
-      {/* Poster Image (Visible when not hovering/playing) */}
+      {/* Poster Image (Visible when not playing) */}
       <Image
         src={video.thumbnail}
         alt={video.title}
@@ -187,12 +188,21 @@ export const FeaturedVideos: React.FC = () => {
   return (
     <section className="py-14 sm:py-20 bg-royal-damask border-y border-[#7B3D14]/15">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Royal Section Header */}
-        <RoyalDivider
-          kicker="Reels & Live Drapes"
-          title="Drapes In Real Motion"
-          subtitle="Hover to watch authentic silk textures, pure gold zari shimmer, and festive drapes in motion."
-        />
+        {/* Section Header */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 pb-4 border-b border-[#7B3D14]/20 gap-4">
+          <div>
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#7B3D14]/10 text-[#7B3D14] text-xs font-semibold uppercase tracking-wider mb-2">
+              <Sparkles className="w-3.5 h-3.5 text-[#DFB873]" />
+              <span>Reels & Live Drapes</span>
+            </div>
+            <h2 className="font-serif-heading text-2xl sm:text-3xl lg:text-4xl font-bold text-[#341B09]">
+              Drapes In Real Motion
+            </h2>
+          </div>
+          <p className="text-xs sm:text-sm text-[#341B09]/70 max-w-md md:text-right">
+            Hover to watch authentic silk textures, festive drapes, and elegant attire in motion.
+          </p>
+        </div>
 
         {/* 4 Portrait Video Cards with Hover Auto-Play */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
@@ -221,20 +231,26 @@ export const FeaturedVideos: React.FC = () => {
                 <span className="px-2 py-0.5 rounded-full bg-[#7B3D14] text-[10px] font-bold uppercase text-[#FCF3ED]">
                   {activeModalVideo.category}
                 </span>
-                <span className="text-xs font-semibold text-[#DFB873]">{activeModalVideo.price}</span>
+                <span className="text-xs font-semibold text-[#DFB873]">
+                  {activeModalVideo.price}
+                </span>
               </div>
 
               <div className="flex items-center gap-2">
                 <button
                   onClick={toggleMute}
-                  className="p-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
+                  className="p-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors cursor-pointer"
                   aria-label="Toggle Sound"
                 >
-                  {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4 text-[#DFB873]" />}
+                  {isMuted ? (
+                    <VolumeX className="w-4 h-4" />
+                  ) : (
+                    <Volume2 className="w-4 h-4 text-[#DFB873]" />
+                  )}
                 </button>
                 <button
                   onClick={() => setActiveModalVideo(null)}
-                  className="p-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
+                  className="p-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors cursor-pointer"
                   aria-label="Close modal"
                 >
                   <X className="w-5 h-5" />

@@ -2,13 +2,7 @@ import type { Metadata } from "next";
 import { Cormorant_Garamond, DM_Sans } from "next/font/google";
 import "./globals.css";
 import { StoreProvider } from "@/context/StoreContext";
-import { AnnouncementBar } from "@/components/AnnouncementBar";
-import { Header } from "@/components/Header";
-import { Footer } from "@/components/Footer";
-import { MobileBottomNav } from "@/components/MobileBottomNav";
-import { WhatsAppButton } from "@/components/WhatsAppButton";
-import { CartDrawer } from "@/components/CartDrawer";
-import { SearchModal } from "@/components/SearchModal";
+import { StorefrontChrome } from "@/components/StorefrontChrome";
 
 const cormorant = Cormorant_Garamond({
   variable: "--font-cormorant",
@@ -39,23 +33,7 @@ export default function RootLayout({
     <html lang="en" className={`${cormorant.variable} ${dmSans.variable}`}>
       <body className="min-h-screen flex flex-col bg-[#FCF3ED] text-[#341B09] selection:bg-[#7B3D14] selection:text-white">
         <StoreProvider>
-          {/* Top Announcement Bar */}
-          <AnnouncementBar />
-
-          {/* Sticky Header with Mega-Menu & Search */}
-          <Header />
-
-          {/* Page Content */}
-          <div className="flex-1">{children}</div>
-
-          {/* Store Footer */}
-          <Footer />
-
-          {/* Interactive Drawers & Overlays */}
-          <CartDrawer />
-          <SearchModal />
-          <MobileBottomNav />
-          <WhatsAppButton />
+          <StorefrontChrome>{children}</StorefrontChrome>
         </StoreProvider>
       </body>
     </html>

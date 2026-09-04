@@ -2,8 +2,8 @@
 
 import React from "react";
 import Link from "next/link";
-import { ArrowRight, Tag, Sparkles } from "lucide-react";
-import { RoyalDivider, LotusMedallion, CornerFiligree } from "./ui/RoyalMotifs";
+import { ArrowRight, Tag } from "lucide-react";
+import { LotusMedallion, CornerFiligree } from "./ui/RoyalMotifs";
 
 interface PriceRange {
   title: string;
@@ -53,12 +53,19 @@ export const ShopByPrice: React.FC = () => {
   return (
     <section className="py-14 sm:py-20 bg-[#FAF5EE] border-b border-[#7B3D14]/15">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Royal Section Header */}
-        <RoyalDivider
-          kicker="Royal Treasury"
-          title="Shop By Price & Budget"
-          subtitle="Direct from master weavers — uncompromised royal elegance for every celebration."
-        />
+        {/* Pill-Badge Centered Header */}
+        <div className="text-center max-w-2xl mx-auto mb-10 sm:mb-12">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#7B3D14]/10 border border-[#7B3D14]/20 text-[#7B3D14] text-xs font-bold uppercase tracking-wider mb-3 shadow-xs">
+            <Tag className="w-3.5 h-3.5 text-[#DFB873]" />
+            <span>Budget-Friendly Luxury</span>
+          </div>
+          <h2 className="font-serif-heading text-2xl sm:text-3xl lg:text-4xl font-bold text-[#341B09] tracking-tight">
+            Shop By Price & Budget
+          </h2>
+          <p className="text-xs sm:text-sm text-[#341B09]/70 mt-2 font-light">
+            Direct from master weavers — uncompromised royal elegance for every celebration.
+          </p>
+        </div>
 
         {/* 4 Price Tiles Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">

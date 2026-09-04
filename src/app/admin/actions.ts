@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
-import { Product, Banner } from "@/lib/types";
+import { Product, Banner, Collection } from "@/lib/types";
 import { addProduct as fallbackAddProduct, deleteProduct as fallbackDeleteProduct } from "@/lib/supabase/api";
 
 const getAdminPassword = () => {
@@ -107,6 +107,7 @@ export async function createProductServerAction(
       }
 
       revalidatePath("/");
+      revalidatePath("/admin");
       revalidatePath("/collections/[slug]", "page");
       revalidatePath(`/products/${productData.slug}`);
       return { success: true, product: data as Product };
@@ -114,6 +115,7 @@ export async function createProductServerAction(
       console.error("Server action error:", e);
       const fallback = await fallbackAddProduct(productData);
       revalidatePath("/");
+      revalidatePath("/admin");
       return { success: true, product: fallback };
     }
   }
@@ -121,8 +123,52 @@ export async function createProductServerAction(
   // Fallback to local memory helper
   const fallback = await fallbackAddProduct(productData);
   revalidatePath("/");
+  revalidatePath("/admin");
   revalidatePath("/collections/[slug]", "page");
   return { success: true, product: fallback };
+}
+
+/**
+ * Update an existing product via Server Action
+ */
+export async function updateProductServerAction(
+  productId: string,
+  productData: Partial<Omit<Product, "id">>,
+  adminPassword: string
+): Promise<{ success: boolean; product?: Product; error?: string }> {
+  const auth = await verifyAdminPassword(adminPassword);
+  if (!auth.success) {
+    return { success: false, error: auth.message };
+  }
+
+  const supabase = createServerSupabaseClient();
+  if (supabase) {
+    try {
+      const { data, error } = await supabase
+        .from("products")
+        .update(productData)
+        .eq("id", productId)
+        .select()
+        .single();
+
+      if (error) {
+        console.error("Supabase update error:", error);
+        return { success: false, error: error.message };
+      }
+
+      revalidatePath("/");
+      revalidatePath("/admin");
+      revalidatePath("/collections/[slug]", "page");
+      if (productData.slug) {
+        revalidatePath(`/products/${productData.slug}`);
+      }
+      return { success: true, product: data as Product };
+    } catch (e: any) {
+      return { success: false, error: e.message || "Failed to update product." };
+    }
+  }
+
+  return { success: false, error: "Supabase client not configured." };
 }
 
 /**
@@ -140,14 +186,20 @@ export async function deleteProductServerAction(
   const supabase = createServerSupabaseClient();
   if (supabase) {
     try {
-      await supabase.from("products").delete().eq("id", productId);
-    } catch (e) {
+      const { error } = await supabase.from("products").delete().eq("id", productId);
+      if (error) {
+        console.error("Supabase delete error:", error);
+        return { success: false, error: error.message };
+      }
+    } catch (e: any) {
       console.warn("Delete error in Supabase:", e);
+      return { success: false, error: e.message || "Failed to delete product." };
     }
   }
 
   await fallbackDeleteProduct(productId);
   revalidatePath("/");
+  revalidatePath("/admin");
   revalidatePath("/collections/[slug]", "page");
   return { success: true };
 }
@@ -170,6 +222,156 @@ export async function updateBannerServerAction(
     try {
       await supabase.from("banners").update(bannerData).eq("id", bannerId);
       revalidatePath("/");
+      return { success: true };
+    } catch (e: any) {
+      return { success: false, error: e.message };
+    }
+  }
+
+  return { success: true };
+}
+
+/**
+ * Create a new banner via Server Action
+ */
+export async function createBannerServerAction(
+  bannerData: Omit<Banner, "id">,
+  adminPassword: string
+): Promise<{ success: boolean; banner?: Banner; error?: string }> {
+  const auth = await verifyAdminPassword(adminPassword);
+  if (!auth.success) {
+    return { success: false, error: auth.message };
+  }
+
+  const supabase = createServerSupabaseClient();
+  if (supabase) {
+    try {
+      const { data, error } = await supabase
+        .from("banners")
+        .insert([bannerData])
+        .select()
+        .single();
+
+      if (error) {
+        return { success: false, error: error.message };
+      }
+      revalidatePath("/");
+      return { success: true, banner: data as Banner };
+    } catch (e: any) {
+      return { success: false, error: e.message };
+    }
+  }
+
+  return { success: false, error: "Supabase client not configured." };
+}
+
+/**
+ * Delete a banner via Server Action
+ */
+export async function deleteBannerServerAction(
+  bannerId: string,
+  adminPassword: string
+): Promise<{ success: boolean; error?: string }> {
+  const auth = await verifyAdminPassword(adminPassword);
+  if (!auth.success) {
+    return { success: false, error: auth.message };
+  }
+
+  const supabase = createServerSupabaseClient();
+  if (supabase) {
+    try {
+      await supabase.from("banners").delete().eq("id", bannerId);
+      revalidatePath("/");
+      return { success: true };
+    } catch (e: any) {
+      return { success: false, error: e.message };
+    }
+  }
+
+  return { success: true };
+}
+
+/**
+ * Create a new collection via Server Action
+ */
+export async function createCollectionServerAction(
+  collectionData: Omit<Collection, "id">,
+  adminPassword: string
+): Promise<{ success: boolean; collection?: Collection; error?: string }> {
+  const auth = await verifyAdminPassword(adminPassword);
+  if (!auth.success) {
+    return { success: false, error: auth.message };
+  }
+
+  const supabase = createServerSupabaseClient();
+  if (supabase) {
+    try {
+      const { data, error } = await supabase
+        .from("collections")
+        .insert([collectionData])
+        .select()
+        .single();
+
+      if (error) {
+        return { success: false, error: error.message };
+      }
+      revalidatePath("/");
+      revalidatePath("/collections/[slug]", "page");
+      return { success: true, collection: data as Collection };
+    } catch (e: any) {
+      return { success: false, error: e.message };
+    }
+  }
+
+  return { success: false, error: "Supabase client not configured." };
+}
+
+/**
+ * Delete a collection via Server Action
+ */
+export async function deleteCollectionServerAction(
+  collectionId: string,
+  adminPassword: string
+): Promise<{ success: boolean; error?: string }> {
+  const auth = await verifyAdminPassword(adminPassword);
+  if (!auth.success) {
+    return { success: false, error: auth.message };
+  }
+
+  const supabase = createServerSupabaseClient();
+  if (supabase) {
+    try {
+      await supabase.from("collections").delete().eq("id", collectionId);
+      revalidatePath("/");
+      revalidatePath("/collections/[slug]", "page");
+      return { success: true };
+    } catch (e: any) {
+      return { success: false, error: e.message };
+    }
+  }
+
+  return { success: true };
+}
+
+/**
+ * Update an existing collection via Server Action
+ */
+export async function updateCollectionServerAction(
+  collectionId: string,
+  collectionData: Partial<Omit<Collection, "id">>,
+  adminPassword: string
+): Promise<{ success: boolean; error?: string }> {
+  const auth = await verifyAdminPassword(adminPassword);
+  if (!auth.success) {
+    return { success: false, error: auth.message };
+  }
+
+  const supabase = createServerSupabaseClient();
+  if (supabase) {
+    try {
+      await supabase.from("collections").update(collectionData).eq("id", collectionId);
+      revalidatePath("/");
+      revalidatePath("/collections/[slug]", "page");
       return { success: true };
     } catch (e: any) {
       return { success: false, error: e.message };

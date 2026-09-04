@@ -13,7 +13,7 @@ export const INITIAL_COLLECTIONS: Collection[] = [
     id: 'col-2',
     name: 'Fancy Sarees',
     slug: 'fancy-sarees',
-    image_url: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=800&auto=format&fit=crop',
+    image_url: 'https://images.unsplash.com/photo-1609357605129-26f69add5d6e?q=80&w=800&auto=format&fit=crop',
     description: 'Contemporary lightweight & shimmer party sarees',
     item_count: 219
   },
@@ -37,7 +37,7 @@ export const INITIAL_COLLECTIONS: Collection[] = [
     id: 'col-5',
     name: 'Work Sarees',
     slug: 'work-sarees',
-    image_url: 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?q=80&w=800&auto=format&fit=crop',
+    image_url: 'https://images.unsplash.com/photo-1566737236500-c8ac43014a67?q=80&w=800&auto=format&fit=crop',
     description: 'Intricate zardozi, sequin, and thread embroidery sarees',
     item_count: 58
   }
@@ -54,7 +54,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     image_url: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=800&auto=format&fit=crop',
     gallery_urls: [
       'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=800&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1595777457583-95e059d581b8?q=80&w=800&auto=format&fit=crop'
+      'https://images.unsplash.com/photo-1574169208507-84376144848b?q=80&w=800&auto=format&fit=crop'
     ],
     category: 'pattu-sarees',
     sizes: ['Free Size'],
@@ -72,7 +72,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     image_url: 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?q=80&w=800&auto=format&fit=crop',
     gallery_urls: [
       'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?q=80&w=800&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?q=80&w=800&auto=format&fit=crop'
+      'https://images.unsplash.com/photo-1621600411688-4be93cd68504?q=80&w=800&auto=format&fit=crop'
     ],
     category: 'lehengas',
     sizes: ['S', 'M', 'L', 'XL', 'Semi-Stitched'],
@@ -123,10 +123,10 @@ export const INITIAL_PRODUCTS: Product[] = [
     description: 'Traditional Gadwal weave crafted with contrasting kuttu border and pure zari butta work. Soft drape finish designed for all-day comfort.',
     price: 1699,
     sale_price: 599,
-    image_url: 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?q=80&w=800&auto=format&fit=crop',
+    image_url: 'https://images.unsplash.com/photo-1609357605129-26f69add5d6e?q=80&w=800&auto=format&fit=crop',
     gallery_urls: [
-      'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?q=80&w=800&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1595777457583-95e059d581b8?q=80&w=800&auto=format&fit=crop'
+      'https://images.unsplash.com/photo-1609357605129-26f69add5d6e?q=80&w=800&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1574169208507-84376144848b?q=80&w=800&auto=format&fit=crop'
     ],
     category: 'fancy-sarees',
     sizes: ['Free Size'],
@@ -141,8 +141,9 @@ export const INITIAL_PRODUCTS: Product[] = [
     description: 'Pure georgette saree heavily accented with antique gold zardozi, cutdana, and pearl border craftsmanship. Perfect statement heirloom piece.',
     price: 4500,
     sale_price: 1899,
-    image_url: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=800&auto=format&fit=crop',
+    image_url: 'https://images.unsplash.com/photo-1566737236500-c8ac43014a67?q=80&w=800&auto=format&fit=crop',
     gallery_urls: [
+      'https://images.unsplash.com/photo-1566737236500-c8ac43014a67?q=80&w=800&auto=format&fit=crop',
       'https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=800&auto=format&fit=crop'
     ],
     category: 'work-sarees',
@@ -158,8 +159,9 @@ export const INITIAL_PRODUCTS: Product[] = [
     description: 'Contemporary pastel lehenga set accented with real foil mirror work and thread embroidery. Includes flared skirt, stitched designer blouse, and ruffled dupatta.',
     price: 8999,
     sale_price: 3499,
-    image_url: 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?q=80&w=800&auto=format&fit=crop',
+    image_url: 'https://images.unsplash.com/photo-1621600411688-4be93cd68504?q=80&w=800&auto=format&fit=crop',
     gallery_urls: [
+      'https://images.unsplash.com/photo-1621600411688-4be93cd68504?q=80&w=800&auto=format&fit=crop',
       'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?q=80&w=800&auto=format&fit=crop'
     ],
     category: 'lehengas',

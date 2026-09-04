@@ -36,11 +36,15 @@ export const Footer: React.FC = () => {
             </p>
           </div>
 
-          <div className="w-full lg:w-auto">
             {subscribed ? (
-              <div className="flex items-center gap-2 px-6 py-3.5 bg-emerald-900/60 border border-emerald-500/50 rounded-2xl text-emerald-200 text-xs font-semibold">
-                <Check className="w-4 h-4 text-emerald-400" />
-                <span>Thank you! Welcome to the Shopin Heritage Family.</span>
+              <div className="flex flex-col items-start gap-1 px-6 py-3.5 bg-emerald-900/60 border border-emerald-500/50 rounded-2xl text-emerald-200 text-xs font-semibold">
+                <div className="flex items-center gap-2">
+                  <Check className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <span>Thank you! Welcome to the Shopin Heritage Family.</span>
+                </div>
+                <span className="text-[10px] text-emerald-300/80 font-normal pl-6">
+                  (Demo: Email captured in local session. Live email dispatches activate with CRM setup.)
+                </span>
               </div>
             ) : (
               <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-2.5 w-full">
@@ -239,7 +243,6 @@ export const Footer: React.FC = () => {
             <span>🇮🇳 100% Authentic Indian Weaves</span>
           </div>
         </div>
-      </div>
     </footer>
   );
 };

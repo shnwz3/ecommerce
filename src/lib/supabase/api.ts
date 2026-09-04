@@ -1,6 +1,11 @@
 import { supabase } from './client';
+import { createServerSupabaseClient } from './server';
 import { Product, Collection, Banner } from '../types';
 import { INITIAL_PRODUCTS, INITIAL_COLLECTIONS, INITIAL_BANNERS } from '../data/initial-data';
+
+const getDbClient = () => {
+  return createServerSupabaseClient() || supabase;
+};
 
 // In-memory runtime cache for seamless live demo updates even before database sync
 let inMemoryProducts: Product[] = [...INITIAL_PRODUCTS];
@@ -15,9 +20,10 @@ export async function getProducts(options?: {
   isNew?: boolean;
   limit?: number;
 }): Promise<Product[]> {
-  if (supabase) {
+  const db = getDbClient();
+  if (db) {
     try {
-      let query = supabase.from('products').select('*').order('created_at', { ascending: false });
+      let query = db.from('products').select('*').order('created_at', { ascending: false });
 
       if (options?.category && options.category !== 'all') {
         query = query.eq('category', options.category);
@@ -62,9 +68,10 @@ export async function getProducts(options?: {
  * Fetch a single product by its URL slug
  */
 export async function getProductBySlug(slug: string): Promise<Product | null> {
-  if (supabase) {
+  const db = getDbClient();
+  if (db) {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await db
         .from('products')
         .select('*')
         .eq('slug', slug)
@@ -84,9 +91,10 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
  * Fetch collections
  */
 export async function getCollections(): Promise<Collection[]> {
-  if (supabase) {
+  const db = getDbClient();
+  if (db) {
     try {
-      const { data, error } = await supabase.from('collections').select('*');
+      const { data, error } = await db.from('collections').select('*');
       if (!error && data && data.length > 0) {
         return data as Collection[];
       }
@@ -102,9 +110,10 @@ export async function getCollections(): Promise<Collection[]> {
  * Fetch banners by position
  */
 export async function getBanners(position?: string): Promise<Banner[]> {
-  if (supabase) {
+  const db = getDbClient();
+  if (db) {
     try {
-      let query = supabase.from('banners').select('*').order('sort_order', { ascending: true });
+      let query = db.from('banners').select('*').order('sort_order', { ascending: true });
       if (position) {
         query = query.eq('position', position);
       }
@@ -133,9 +142,10 @@ export async function addProduct(product: Omit<Product, 'id'>): Promise<Product>
     created_at: new Date().toISOString(),
   };
 
-  if (supabase) {
+  const db = getDbClient();
+  if (db) {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await db
         .from('products')
         .insert([product])
         .select()
@@ -144,8 +154,11 @@ export async function addProduct(product: Omit<Product, 'id'>): Promise<Product>
         inMemoryProducts.unshift(data as Product);
         return data as Product;
       }
+      if (error) {
+        console.warn('Supabase insert error in api.ts:', error);
+      }
     } catch (e) {
-      console.warn('Supabase insert error, saving to memory:', e);
+      console.warn('Supabase insert exception, saving to memory:', e);
     }
   }
 
@@ -157,11 +170,15 @@ export async function addProduct(product: Omit<Product, 'id'>): Promise<Product>
  * Delete a product by ID
  */
 export async function deleteProduct(id: string): Promise<boolean> {
-  if (supabase) {
+  const db = getDbClient();
+  if (db) {
     try {
-      await supabase.from('products').delete().eq('id', id);
+      const { error } = await db.from('products').delete().eq('id', id);
+      if (error) {
+        console.warn('Supabase delete error in api.ts:', error);
+      }
     } catch (e) {
-      console.warn('Supabase delete error:', e);
+      console.warn('Supabase delete exception:', e);
     }
   }
   inMemoryProducts = inMemoryProducts.filter(p => p.id !== id);

@@ -1,14 +1,16 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { X, Trash2, ShoppingBag, ArrowRight, ShieldCheck, Truck, MessageCircle, Sparkles } from "lucide-react";
 import { useStore } from "@/context/StoreContext";
+import { CheckoutModal } from "./CheckoutModal";
 
 export const CartDrawer: React.FC = () => {
   const { isCartOpen, closeCart, cart, updateCartQuantity, removeFromCart, cartTotal, cartCount } =
     useStore();
+  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -22,7 +24,7 @@ export const CartDrawer: React.FC = () => {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isCartOpen, closeCart]);
 
-  if (!isCartOpen) return null;
+  if (!isCartOpen && !isCheckoutOpen) return null;
 
   const whatsappMessage = encodeURIComponent(
     `Hello Shopin Showroom! I would like to place an order for the items in my shopping bag (Total: ₹${cartTotal.toLocaleString(
@@ -220,10 +222,8 @@ export const CartDrawer: React.FC = () => {
               {/* Checkout Actions */}
               <div className="space-y-2 pt-1">
                 <button
-                  onClick={() => {
-                    alert("Order simulation received! Thank you for ordering from Shopin Showroom.");
-                  }}
-                  className="w-full py-3.5 bg-[#7B3D14] hover:bg-[#632f0e] text-white rounded-xl font-bold text-sm tracking-wide transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2 hover:scale-[1.01]"
+                  onClick={() => setIsCheckoutOpen(true)}
+                  className="w-full py-3.5 bg-[#7B3D14] hover:bg-[#632f0e] text-white rounded-xl font-bold text-sm tracking-wide transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2 hover:scale-[1.01] cursor-pointer"
                 >
                   <Sparkles className="w-4 h-4 text-[#DFB873]" />
                   <span>Proceed to Secure Checkout</span>
@@ -239,12 +239,19 @@ export const CartDrawer: React.FC = () => {
                   <span>Order Directly via WhatsApp</span>
                 </a>
               </div>
-
-             
             </div>
           )}
         </div>
       </div>
+
+      {/* Real Checkout Modal */}
+      <CheckoutModal
+        isOpen={isCheckoutOpen}
+        onClose={() => {
+          setIsCheckoutOpen(false);
+          closeCart();
+        }}
+      />
     </div>
   );
 };

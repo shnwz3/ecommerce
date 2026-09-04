@@ -1,6 +1,6 @@
 import React from "react";
 import { getProducts, getCollections, getBanners } from "@/lib/supabase/api";
-import { AdminDashboard } from "./AdminDashboard";
+import { AdminShell } from "./components/AdminShell";
 
 export const revalidate = 0;
 
@@ -11,5 +11,5 @@ export default async function AdminPage() {
     getBanners(),
   ]);
 
-  return <AdminDashboard initialProducts={products} collections={collections} initialBanners={banners} />;
+  return <AdminShell initialProducts={products} collections={collections} initialBanners={banners} />;
 }
