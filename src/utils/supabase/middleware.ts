@@ -39,8 +39,13 @@ export const updateSession = async (request: NextRequest) => {
       },
     );
 
-    // refreshing the auth token
-    await supabase.auth.getUser();
+    // Only refresh session if an auth cookie actually exists
+    const hasAuthCookie = request.cookies
+      .getAll()
+      .some((c) => c.name.includes("-auth-token") || c.name.includes("sb-"));
+    if (hasAuthCookie) {
+      await supabase.auth.getUser();
+    }
   } catch (error) {
     // If auth session refresh fails, continue without breaking the request
     console.error("Middleware auth session refresh failed:", error);

@@ -22,11 +22,14 @@ import {
   ShieldCheck,
   AlertCircle,
   Check,
+  RefreshCw,
 } from "lucide-react";
 import { Order } from "@/lib/types";
 
 interface OrdersManagerProps {
   orders: Order[];
+  isRefreshing?: boolean;
+  onRefreshOrders?: () => void;
   onUpdateOrderStatus?: (orderId: string, status: Order["status"]) => void;
   onUpdatePaymentStatus?: (orderId: string, paymentStatus: NonNullable<Order["payment_status"]>) => void;
 }
@@ -36,7 +39,8 @@ const ORDER_STATUS_CONFIG: Record<
   { label: string; bg: string; text: string; icon: React.ElementType }
 > = {
   pending: { label: "Pending", bg: "bg-amber-100", text: "text-amber-800", icon: Clock },
-  processing: { label: "Processing", bg: "bg-blue-100", text: "text-blue-800", icon: ShoppingBag },
+  ordered: { label: "Ordered", bg: "bg-blue-100", text: "text-blue-800", icon: CheckCircle2 },
+  processing: { label: "Processing", bg: "bg-indigo-100", text: "text-indigo-800", icon: ShoppingBag },
   shipped: { label: "Shipped", bg: "bg-purple-100", text: "text-purple-800", icon: Truck },
   delivered: { label: "Delivered", bg: "bg-emerald-100", text: "text-emerald-800", icon: CheckCircle2 },
   cancelled: { label: "Cancelled", bg: "bg-red-100", text: "text-red-800", icon: XCircle },
@@ -44,6 +48,8 @@ const ORDER_STATUS_CONFIG: Record<
 
 export const OrdersManager: React.FC<OrdersManagerProps> = ({
   orders: initialOrders,
+  isRefreshing = false,
+  onRefreshOrders,
   onUpdateOrderStatus,
   onUpdatePaymentStatus,
 }) => {
@@ -52,6 +58,11 @@ export const OrdersManager: React.FC<OrdersManagerProps> = ({
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [paymentFilter, setPaymentFilter] = useState<string>("all");
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+
+  // Synchronize internal orders state whenever initialOrders prop changes
+  React.useEffect(() => {
+    setOrders(initialOrders);
+  }, [initialOrders]);
 
   // Financial Stats
   const financials = useMemo(() => {
@@ -146,6 +157,18 @@ export const OrdersManager: React.FC<OrdersManagerProps> = ({
             Review customer orders, check payment status (UPI, Card, COD), and update fulfillment
           </p>
         </div>
+
+        {onRefreshOrders && (
+          <button
+            onClick={() => onRefreshOrders()}
+            disabled={isRefreshing}
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-[#7B3D14]/20 hover:border-[#7B3D14] bg-white text-[#341B09] font-medium text-xs shadow-sm hover:shadow transition-all disabled:opacity-60"
+            title="Refresh orders list"
+          >
+            <RefreshCw className={`w-3.5 h-3.5 text-[#7B3D14] ${isRefreshing ? "animate-spin" : ""}`} />
+            <span>{isRefreshing ? "Syncing..." : "Refresh Orders"}</span>
+          </button>
+        )}
       </div>
 
       {/* Financial Summary Cards */}
@@ -198,6 +221,7 @@ export const OrdersManager: React.FC<OrdersManagerProps> = ({
             [
               { id: "all", label: "All Orders" },
               { id: "pending", label: "Pending" },
+              { id: "ordered", label: "Ordered" },
               { id: "processing", label: "Processing" },
               { id: "shipped", label: "Shipped" },
               { id: "delivered", label: "Delivered" },
@@ -368,21 +392,68 @@ export const OrdersManager: React.FC<OrdersManagerProps> = ({
                         </div>
                       </td>
                       <td className="px-5 py-4" onClick={(e) => e.stopPropagation()}>
-                        <div className="relative inline-block">
-                          <select
-                            value={order.status}
-                            onChange={(e) =>
-                              handleStatusChange(order.id, e.target.value as Order["status"])
-                            }
-                            className={`px-3 py-1 rounded-full text-[11px] font-semibold appearance-none pr-6 cursor-pointer border border-black/5 focus:outline-none focus:ring-1 focus:ring-[#7B3D14] ${statusInfo.bg} ${statusInfo.text}`}
-                          >
-                            <option value="pending">Pending</option>
-                            <option value="processing">Processing</option>
-                            <option value="shipped">Shipped</option>
-                            <option value="delivered">Delivered</option>
-                            <option value="cancelled">Cancelled</option>
-                          </select>
-                          <ChevronDown className="w-3 h-3 absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none opacity-60" />
+                        <div className="space-y-1.5">
+                          <div className="relative inline-block">
+                            <select
+                              value={order.status}
+                              onChange={(e) =>
+                                handleStatusChange(order.id, e.target.value as Order["status"])
+                              }
+                              className={`px-3 py-1 rounded-full text-[11px] font-semibold appearance-none pr-6 cursor-pointer border border-black/5 focus:outline-none focus:ring-1 focus:ring-[#7B3D14] ${statusInfo.bg} ${statusInfo.text}`}
+                            >
+                              <option value="pending">Pending</option>
+                              <option value="ordered">Ordered / Confirmed</option>
+                              <option value="processing">Processing</option>
+                              <option value="shipped">Shipped</option>
+                              <option value="delivered">Delivered</option>
+                              <option value="cancelled">Cancelled</option>
+                            </select>
+                            <ChevronDown className="w-3 h-3 absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none opacity-60" />
+                          </div>
+
+                          {/* Quick Action One-Click Shortcuts */}
+                          {order.status === "pending" && (
+                            <div>
+                              <button
+                                onClick={() => handleStatusChange(order.id, "ordered")}
+                                className="px-2.5 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-[10px] font-bold flex items-center gap-1 transition-all shadow-xs"
+                                title="Confirm this new order"
+                              >
+                                <CheckCircle2 className="w-3 h-3" /> Mark as Ordered
+                              </button>
+                            </div>
+                          )}
+                          {order.status === "ordered" && (
+                            <div>
+                              <button
+                                onClick={() => handleStatusChange(order.id, "shipped")}
+                                className="px-2.5 py-1 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-[10px] font-bold flex items-center gap-1 transition-all shadow-xs"
+                                title="Dispatch order to customer"
+                              >
+                                <Truck className="w-3 h-3" /> Mark as Shipped
+                              </button>
+                            </div>
+                          )}
+                          {order.status === "processing" && (
+                            <div>
+                              <button
+                                onClick={() => handleStatusChange(order.id, "shipped")}
+                                className="px-2.5 py-1 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-[10px] font-bold flex items-center gap-1 transition-all shadow-xs"
+                              >
+                                <Truck className="w-3 h-3" /> Mark as Shipped
+                              </button>
+                            </div>
+                          )}
+                          {order.status === "shipped" && (
+                            <div>
+                              <button
+                                onClick={() => handleStatusChange(order.id, "delivered")}
+                                className="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-[10px] font-bold flex items-center gap-1 transition-all shadow-xs"
+                              >
+                                <Check className="w-3 h-3" /> Mark Delivered
+                              </button>
+                            </div>
+                          )}
                         </div>
                       </td>
                       <td className="px-5 py-4 text-right" onClick={(e) => e.stopPropagation()}>
@@ -457,6 +528,56 @@ export const OrdersManager: React.FC<OrdersManagerProps> = ({
                     <Check className="w-4 h-4" /> Mark Payment Received
                   </button>
                 )}
+              </div>
+
+              {/* Fulfillment Status Controls in Modal */}
+              <div className="pt-3 border-t border-[#7B3D14]/10 flex flex-wrap items-center justify-between gap-3">
+                <div className="flex items-center gap-2">
+                  <span className="text-[10px] text-[#341B09]/60 font-bold uppercase tracking-wider">
+                    Fulfillment:
+                  </span>
+                  <select
+                    value={selectedOrder.status}
+                    onChange={(e) =>
+                      handleStatusChange(selectedOrder.id, e.target.value as Order["status"])
+                    }
+                    className="px-3 py-1 rounded-xl text-xs font-bold border border-[#7B3D14]/20 bg-white text-[#341B09]"
+                  >
+                    <option value="pending">Pending</option>
+                    <option value="ordered">Ordered / Confirmed</option>
+                    <option value="processing">Processing</option>
+                    <option value="shipped">Shipped</option>
+                    <option value="delivered">Delivered</option>
+                    <option value="cancelled">Cancelled</option>
+                  </select>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  {selectedOrder.status === "pending" && (
+                    <button
+                      onClick={() => handleStatusChange(selectedOrder.id, "ordered")}
+                      className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold shadow flex items-center gap-1.5 transition-all"
+                    >
+                      <CheckCircle2 className="w-3.5 h-3.5" /> Mark as Ordered
+                    </button>
+                  )}
+                  {(selectedOrder.status === "ordered" || selectedOrder.status === "processing") && (
+                    <button
+                      onClick={() => handleStatusChange(selectedOrder.id, "shipped")}
+                      className="px-3 py-1.5 bg-purple-600 hover:bg-purple-700 text-white rounded-xl text-xs font-bold shadow flex items-center gap-1.5 transition-all"
+                    >
+                      <Truck className="w-3.5 h-3.5" /> Mark as Shipped
+                    </button>
+                  )}
+                  {selectedOrder.status === "shipped" && (
+                    <button
+                      onClick={() => handleStatusChange(selectedOrder.id, "delivered")}
+                      className="px-3 py-1.5 bg-emerald-700 hover:bg-emerald-800 text-white rounded-xl text-xs font-bold shadow flex items-center gap-1.5 transition-all"
+                    >
+                      <Check className="w-3.5 h-3.5" /> Mark Delivered
+                    </button>
+                  )}
+                </div>
               </div>
 
               {selectedOrder.transaction_id && (

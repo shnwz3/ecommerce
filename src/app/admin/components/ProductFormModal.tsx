@@ -64,36 +64,93 @@ export const ProductFormModal: React.FC<ProductFormModalProps> = ({
     }
   }, [name, isEdit]);
 
+  const uploadFile = async (file: File): Promise<string | null> => {
+    setIsUploadingImage(true);
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("adminPassword", adminPassword);
+
+      // Primary: Call robust /api/upload
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await res.json();
+      if (data.success && data.url) {
+        setImageUrl(data.url);
+        setIsUploadingImage(false);
+        return data.url;
+      }
+
+      // Secondary fallback: Server Action
+      const saRes = await uploadImageServerAction(formData, adminPassword);
+      if (saRes.success && saRes.url) {
+        setImageUrl(saRes.url);
+        setIsUploadingImage(false);
+        return saRes.url;
+      }
+
+      onStatusNotice({
+        type: "error",
+        message: data.error || saRes.error || "Failed to upload image.",
+      });
+    } catch (err: any) {
+      console.error("Upload exception:", err);
+      // Try server action directly
+      try {
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("adminPassword", adminPassword);
+        const saRes = await uploadImageServerAction(formData, adminPassword);
+        if (saRes.success && saRes.url) {
+          setImageUrl(saRes.url);
+          setIsUploadingImage(false);
+          return saRes.url;
+        }
+      } catch {}
+      onStatusNotice({
+        type: "error",
+        message: "Failed to upload image file. Please check connection or paste direct URL.",
+      });
+    } finally {
+      setIsUploadingImage(false);
+    }
+    return null;
+  };
+
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
     setSelectedFile(file);
-    setIsUploadingImage(true);
-
-    const formData = new FormData();
-    formData.append("file", file);
-
-    const res = await uploadImageServerAction(formData, adminPassword);
-    setIsUploadingImage(false);
-
-    if (res.success && res.url) {
-      setImageUrl(res.url);
-      onStatusNotice({ type: "success", message: "Image uploaded to Supabase Storage!" });
-    } else {
-      const localBlob = URL.createObjectURL(file);
-      setImageUrl(localBlob);
-      onStatusNotice({
-        type: "error",
-        message: res.error || "Storage upload issue. Using local preview.",
-      });
+    const uploadedUrl = await uploadFile(file);
+    if (uploadedUrl) {
+      onStatusNotice({ type: "success", message: "Image uploaded and active!" });
     }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name || !price || !imageUrl) {
-      onStatusNotice({ type: "error", message: "Please fill in product name, price, and image." });
+
+    let finalImageUrl = imageUrl.trim();
+
+    // If file was selected but not uploaded yet, upload it now
+    if (!finalImageUrl && selectedFile) {
+      setIsSubmitting(true);
+      const uploadedUrl = await uploadFile(selectedFile);
+      if (uploadedUrl) {
+        finalImageUrl = uploadedUrl;
+      }
+    }
+
+    if (!name.trim() || !price || !finalImageUrl) {
+      setIsSubmitting(false);
+      onStatusNotice({
+        type: "error",
+        message: "Please fill in product title, price, and select or upload an image.",
+      });
       return;
     }
 
@@ -104,18 +161,18 @@ export const ProductFormModal: React.FC<ProductFormModalProps> = ({
       .map((s) => s.trim())
       .filter(Boolean);
 
-    const galleryArray = [imageUrl];
+    const galleryArray = [finalImageUrl];
     if (galleryUrl2.trim()) {
       galleryArray.push(galleryUrl2.trim());
     }
 
     const productPayload = {
-      name,
-      slug: slug || `product-${Date.now()}`,
-      description: description || null,
+      name: name.trim(),
+      slug: slug.trim() || `product-${Date.now()}`,
+      description: description.trim() || null,
       price: parseFloat(price),
       sale_price: salePrice ? parseFloat(salePrice) : null,
-      image_url: imageUrl,
+      image_url: finalImageUrl,
       gallery_urls: galleryArray,
       category,
       sizes: sizesArray.length > 0 ? sizesArray : ["Free Size"],

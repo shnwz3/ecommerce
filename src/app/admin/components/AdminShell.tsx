@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import {
   Lock,
@@ -24,12 +24,14 @@ interface AdminShellProps {
   initialProducts: Product[];
   collections: Collection[];
   initialBanners: Banner[];
+  initialOrders?: Order[];
 }
 
 export const AdminShell: React.FC<AdminShellProps> = ({
   initialProducts,
   collections: initialCollections,
   initialBanners,
+  initialOrders = [],
 }) => {
   // Authentication State
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
@@ -46,7 +48,7 @@ export const AdminShell: React.FC<AdminShellProps> = ({
   const [products, setProducts] = useState<Product[]>(initialProducts);
   const [collections, setCollections] = useState<Collection[]>(initialCollections);
   const [banners, setBanners] = useState<Banner[]>(initialBanners);
-  const [orders, setOrders] = useState<Order[]>([]);
+  const [orders, setOrders] = useState<Order[]>(initialOrders);
 
   // Toast / Status notification
   const [statusNotice, setStatusNotice] = useState<{
@@ -58,6 +60,12 @@ export const AdminShell: React.FC<AdminShellProps> = ({
   useEffect(() => {
     setProducts(initialProducts);
   }, [initialProducts]);
+
+  useEffect(() => {
+    if (initialOrders && initialOrders.length > 0) {
+      setOrders((prev) => (prev.length === 0 ? initialOrders : prev));
+    }
+  }, [initialOrders]);
 
   useEffect(() => {
     setCollections(initialCollections);
@@ -76,45 +84,45 @@ export const AdminShell: React.FC<AdminShellProps> = ({
     }
   }, []);
 
-  // Real-time Orders Poller: Syncs live orders placed on the storefront every 3 seconds
-  useEffect(() => {
-    let isMounted = true;
+  const [isRefreshingOrders, setIsRefreshingOrders] = useState<boolean>(false);
 
-    const fetchLiveOrders = async () => {
-      try {
-        const res = await fetch("/api/orders", { cache: "no-store" });
-        const data = await res.json();
-        if (data.success && Array.isArray(data.orders) && isMounted) {
-          setOrders((prev) => {
-            if (data.orders.length > prev.length && prev.length > 0) {
-              const newest = data.orders[0];
-              setStatusNotice({
-                type: "success",
-                message: `New Order Received: #${newest.order_number} by ${newest.customer_name} (₹${newest.total.toLocaleString("en-IN")})`,
-              });
-            }
-            return data.orders;
-          });
-        }
-      } catch (e) {
-        // silent polling
+  // Fetch orders on demand (when entering orders section or on manual refresh)
+  const fetchOrders = useCallback(async () => {
+    if (!adminPassword) return;
+    setIsRefreshingOrders(true);
+    try {
+      const res = await fetch("/api/orders", {
+        cache: "no-store",
+        headers: {
+          "x-admin-password": adminPassword,
+        },
+      });
+      const data = await res.json();
+      if (data.success && Array.isArray(data.orders)) {
+        setOrders(data.orders);
       }
-    };
+    } catch (e) {
+      console.warn("Notice refreshing orders:", e);
+    } finally {
+      setIsRefreshingOrders(false);
+    }
+  }, [adminPassword]);
 
-    fetchLiveOrders();
-    const interval = setInterval(fetchLiveOrders, 3000);
-
-    return () => {
-      isMounted = false;
-      clearInterval(interval);
-    };
-  }, []);
+  // Sync orders ONLY when the admin navigates to the "orders" section
+  useEffect(() => {
+    if (activeSection === "orders" && isAuthenticated && adminPassword) {
+      fetchOrders();
+    }
+  }, [activeSection, isAuthenticated, adminPassword, fetchOrders]);
 
   const handleUpdateOrderStatus = async (orderId: string, status: Order["status"]) => {
     try {
       await fetch("/api/orders", {
         method: "PATCH",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "x-admin-password": adminPassword,
+        },
         body: JSON.stringify({ orderId, status }),
       });
       setOrders((prev) => prev.map((o) => (o.id === orderId ? { ...o, status } : o)));
@@ -131,7 +139,10 @@ export const AdminShell: React.FC<AdminShellProps> = ({
     try {
       await fetch("/api/orders", {
         method: "PATCH",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "x-admin-password": adminPassword,
+        },
         body: JSON.stringify({ orderId, payment_status }),
       });
       setOrders((prev) => prev.map((o) => (o.id === orderId ? { ...o, payment_status } : o)));
@@ -350,6 +361,8 @@ export const AdminShell: React.FC<AdminShellProps> = ({
           {activeSection === "orders" && (
             <OrdersManager
               orders={orders}
+              isRefreshing={isRefreshingOrders}
+              onRefreshOrders={fetchOrders}
               onUpdateOrderStatus={handleUpdateOrderStatus}
               onUpdatePaymentStatus={handleUpdatePaymentStatus}
             />

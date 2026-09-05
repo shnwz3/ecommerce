@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { Product } from "@/lib/types";
 import { useStore } from "@/context/StoreContext";
+import { CheckoutModal } from "@/components/CheckoutModal";
 
 interface ProductDetailClientViewProps {
   product: Product;
@@ -25,6 +26,7 @@ interface ProductDetailClientViewProps {
 export const ProductDetailClientView: React.FC<ProductDetailClientViewProps> = ({ product }) => {
   const { addToCart, toggleWishlist, isInWishlist } = useStore();
   const inWishlist = isInWishlist(product.id);
+  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
 
   // Gallery Images List
   const images = [
@@ -268,8 +270,9 @@ export const ProductDetailClientView: React.FC<ProductDetailClientViewProps> = (
             <button
               onClick={() => {
                 addToCart(product, selectedSize, quantity);
+                setIsCheckoutOpen(true);
               }}
-              className="w-full py-3.5 px-6 bg-[#341B09] hover:bg-black text-[#FCF3ED] rounded-xl font-bold text-sm tracking-wide transition-all shadow-md flex items-center justify-center gap-2"
+              className="w-full py-3.5 px-6 bg-[#341B09] hover:bg-black text-[#FCF3ED] rounded-xl font-bold text-sm tracking-wide transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer hover:scale-[1.01]"
             >
               <Sparkles className="w-4 h-4 text-[#C59A4E]" />
               <span>Instant Buy Now</span>
@@ -450,6 +453,12 @@ export const ProductDetailClientView: React.FC<ProductDetailClientViewProps> = (
           </button>
         </div>
       )}
+
+      {/* Instant Checkout Modal */}
+      <CheckoutModal
+        isOpen={isCheckoutOpen}
+        onClose={() => setIsCheckoutOpen(false)}
+      />
     </div>
   );
 };

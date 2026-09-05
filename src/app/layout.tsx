@@ -31,7 +31,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${cormorant.variable} ${dmSans.variable}`}>
-      <body className="min-h-screen flex flex-col bg-[#FCF3ED] text-[#341B09] selection:bg-[#7B3D14] selection:text-white">
+      <body
+        suppressHydrationWarning
+        className="min-h-screen flex flex-col bg-[#FCF3ED] text-[#341B09] selection:bg-[#7B3D14] selection:text-white"
+      >
         <StoreProvider>
           <StorefrontChrome>{children}</StorefrontChrome>
         </StoreProvider>

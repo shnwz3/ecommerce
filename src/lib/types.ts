@@ -54,7 +54,7 @@ export interface Order {
   subtotal: number;
   shipping_fee: number;
   discount: number;
-  status: "pending" | "processing" | "shipped" | "delivered" | "cancelled";
+  status: "pending" | "ordered" | "processing" | "shipped" | "delivered" | "cancelled";
   shipping_address: string;
   city: string;
   state: string;
